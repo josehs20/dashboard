@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class CaixaController extends Controller
+class VendasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,12 @@ class CaixaController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.vendas.index');
+    }
+
+    public function produtos_mais_vendidos()
+    {
+        return view('dashboard.produtos-mais-vendidos.index');
     }
 
     /**

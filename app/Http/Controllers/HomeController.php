@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (auth()->user() && auth()->user()->administrador()) {
+            return redirect()->route('empresas.index');
+        }
+        return redirect()->route('dashboard.index');
     }
 }

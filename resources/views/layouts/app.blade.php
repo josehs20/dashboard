@@ -18,13 +18,13 @@
     <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="plugins/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{{asset('plugins/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -43,6 +43,7 @@
 <body id="page-top">
 
     @if (auth()->user())
+  
         <div id="wrapper">
 
             @include('templates.sidebar')
@@ -59,7 +60,7 @@
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2021</span>
+                            <span>&copy; Alltech Sistemas</span>
                         </div>
                     </div>
                 </footer>
@@ -74,30 +75,30 @@
 
 
 </body>
-
+<script src="{{ asset('js/alerts.js') }}" defer></script>
 <!-- Bootstrap core JavaScript-->
-<script src="plugins/jquery/jquery.min.js"></script>
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="plugins/jquery-easing/jquery.easing.min.js"></script>
+<script src="{{ asset('plugins/jquery-easing/jquery.easing.min.js') }}"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+<script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
 <!-- Page level plugins -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 
 <!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
+<script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
+<script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
-{{-- topbar --}}
+
 <script>
+    //   topbar
     $("#sidebarToggleTop").on("click", function() {
         var nametopBar = document.getElementById("userDropdown");
         nametopBar.children[0].classList.toggle("d-none");
     });
 </script>
-
 </html>

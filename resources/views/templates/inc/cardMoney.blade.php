@@ -8,7 +8,7 @@
                     <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">{{$valor}}</div>
                 </div>
                 <div class="col-auto">
-                     <i class=" {{$icone}}"></i> 
+                     <i class="mr-3 {{$icone}}"></i> 
                 </div>
             </div>
         </div>

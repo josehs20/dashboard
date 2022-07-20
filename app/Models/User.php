@@ -41,4 +41,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function administrador()
+    {
+        return $this->perfil == 'administrador';
+    }
+
+    public function lojas()
+    {
+        return $this->belongsToMany('App\Models\Loja');
+    }
+
+    public function loja()
+    {
+        return $this->belongsTo('App\Models\Loja');
+    }
 }
