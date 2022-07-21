@@ -19,55 +19,55 @@ class Loja extends Model
     }
 
     public function caixas() {
-        return $this->hasMany('App\Model\Caixa');
+        return $this->hasMany('App\Models\Caixa');
     }
 
     public function grades() {
-        return $this->hasMany('App\Model\Grade');
+        return $this->hasMany('App\Models\Grade');
     }
 
     public function iGrades() {
-        return $this->hasMany('App\Model\Igrade');
+        return $this->hasMany('App\Models\Igrade');
     }
 
 
     public function produtos() {
-        return $this->hasMany('App\Model\Produto');
+        return $this->hasMany('App\Models\Produto');
     }
 
     public function estoques() {
-        return $this->hasMany('App\Model\Estoque');
+        return $this->hasMany('App\Models\Estoque');
     }
 
     public function vendas() {
-        return $this->hasMany('App\Model\Venda');
+        return $this->hasMany('App\Models\Venda');
     }
 
     public function devolucoes() {
-        return $this->hasMany('App\Model\Devolucao');
+        return $this->hasMany('App\Models\Devolucao');
     }
 
     public function vendaItens() {
-        return $this->hasMany('App\Model\VendaItem');
+        return $this->hasMany('App\Models\VendaItem');
     }
 
     public function devolucaoItens() {
-        return $this->hasMany('App\Model\DevolucaoItem');
+        return $this->hasMany('App\Models\DevolucaoItem');
     }
 
     public function clientes() {
-        return $this->hasMany('App\Model\Cliente');
+        return $this->hasMany('App\Models\Cliente');
     }
 
     public function receitas() {
-        return $this->hasMany('App\Model\Receita');
+        return $this->hasMany('App\Models\Receita');
     }
 
     public function despesas() {
-        return $this->hasMany('App\Model\Despesa');
+        return $this->hasMany('App\Models\Despesa');
     }
 
     public function fornecedor() {
-        return $this->hasMany('App\Model\Fornecedor');
+        return $this->hasMany('App\Models\Fornecedor');
     }
 }

@@ -2,12 +2,12 @@
 
 
 @section('content')
-<style>
-    .iconsIndexAdmin{
-        font-size: 20px;
-        color: black;
-    }
-</style>
+    <style>
+        .iconsIndexAdmin {
+            font-size: 20px;
+            color: black;
+        }
+    </style>
     @if (Session::has('success'))
 
         <body onload="aletMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
@@ -35,7 +35,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                   
+
                     @if (count($empresas))
                         <table class="table table-hover">
                             <thead>
@@ -56,18 +56,25 @@
                                         <td>{{ $em->ultima_sincronizacao ? date('d-m-Y H:m:s', strtotime($em->ultima_sincronizacao)) : 'Empresa ainda não sincronizada' }}
                                         </td>
                                         @if (count($em->lojas))
-                                        <td><a href="{{route('empresas.show', $em->id)}}"><i class="ri-contacts-fill iconsIndexAdmin"></i></a></td>     
+                                            <td><a href="{{ route('empresas.show', $em->id) }}"><i
+                                                        class="ri-contacts-fill iconsIndexAdmin"></i></a></td>
                                         @else
-                                        <td><a onclick="aletMessage(null, 'warning', 'Empresa precisa ser sincronizada')"><i class="ri-contacts-fill iconsIndexAdmin"></i></a></td>     
+                                            <td><a
+                                                    onclick="aletMessage(null, 'warning', 'Empresa precisa ser sincronizada')"><i
+                                                        class="ri-contacts-fill iconsIndexAdmin"></i></a></td>
                                         @endif
-                                        <td><a href="{{route('empresas.edit', $em->id)}}"><i class="ri-edit-2-fill iconsIndexAdmin"></i></a></td>
-                                        
-                                        <form action="{{route('empresas.destroy', $em->id)}}" method="POST">
+                                        <td><a href="{{ route('empresas.edit', $em->id) }}"><i
+                                                    class="ri-edit-2-fill iconsIndexAdmin"></i></a></td>
+
+                                        <form action="{{ route('empresas.destroy', $em->id) }}"
+                                            id="empresaDestroy<?php echo $em->id; ?>" method="POST"
+                                            onsubmit="confirmDelete(event,'empresaDestroy<?php echo $em->id; ?>', '<?php echo 'Deseja realmente excluir essa empresa ' . $em->nome . ' ?'; ?>', 'warning')">
                                             @csrf
                                             @method('DELETE')
-                                        <td><button class="btn" type="submit"><i class="ri-delete-bin-2-fill iconsIndexAdmin"></i></button>
-                                        </form>  
-                                    </td>
+                                            <td><button class="btn" type="submit"> <i
+                                                        class="ri-delete-bin-2-fill iconsIndexAdmin"></i></button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 @endforeach
 

@@ -19,7 +19,10 @@
             <div class="card-header py-3">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 w-100 font-weight-bold text-primary">Usuarios da empresa {{ $empresa->nome }}</div>
-                    <div class="p-2 flex-shrink-1 bd-highlight"><a class="btn btn-outline-primary btn-sm" href="{{route('usuarios.create' $empresa->id)}}"><h6> + usuário</h6></a></div>
+                    <div class="p-2 flex-shrink-1 bd-highlight"><a class="btn btn-outline-primary btn-sm"
+                            href="{{ route('empresa.usuarios.create', $empresa->id) }}">
+                            <h6> + usuário</h6>
+                        </a></div>
                 </div>
             </div>
             <div class="card-body">
@@ -31,6 +34,7 @@
                                     <th scope="col">Nome</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Loja</th>
+                                    <th scope="col">Tipo</th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
@@ -42,13 +46,18 @@
                                     <tr>
                                         <td>{{ $us->name }}</td>
                                         <td>{{ $us->email }}</td>
+                                        <td>{{ $us->perfil == 'adminVenda' ? 'Admin venda' : 'Somente consulta' }}</td>
                                         <td>{{ $us->loja->alltech_id }}
                                         </td>
-                                       
-                                        <td><a href="{{ route('empresas.edit', $us->id) }}"><i
+
+                                        <td><a href="{{ route('empresa.usuarios.edit', ['empresa' => $us->loja->empresa->id, 'usuario' => $us->id]) }}"><i
                                                     class="ri-edit-2-fill iconsIndexAdmin"></i></a></td>
 
-                                        <form action="{{ route('empresas.destroy', $us->id) }}" method="POST">
+                                        <form
+                                            action="{{ route('empresa.usuarios.destroy', ['empresa' => $us->loja->empresa->id, 'usuario' => $us->id]) }}"
+                                            id="empresaUsuariosDestroy{{$us->id}}"
+                                            onsubmit="confirmDelete(event,'empresaUsuariosDestroy<?php echo $us->id?>', '<?php echo 'Deseja realmente excluir usuário ' . $us->name . ' ?'; ?>', 'warning')"
+                                            method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <td><button class="btn" type="submit"><i

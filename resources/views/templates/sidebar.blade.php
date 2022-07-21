@@ -38,8 +38,7 @@
         </li>
     @else
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center"
-            href="{{ route('dashboard.index') }}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard.index') }}">
             <div class="sidebar-brand-icon">
                 <img width="50px;" src="{{ asset('img/logo2.png') }}" alt="">
             </div>
@@ -48,6 +47,13 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{{route('dashboard.index')}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
 

@@ -15,7 +15,7 @@ class Empresa extends Model
     ];
 
     public function funcionarios() {
-        return $this->hasMany('App\Model\Funario');
+        return $this->hasMany('App\Models\Funario');
     }
 
     public function lojas() {
@@ -23,14 +23,14 @@ class Empresa extends Model
     }
 
     public function logs() {
-        return $this->hasMany('App\Model\Log');
+        return $this->hasMany('App\Models\Log');
     }
 
     public function arquivos() {
-        return $this->hasMany('App\Model\ArquivoImportado');
+        return $this->hasMany('App\Models\ArquivoImportado');
     }
 
     public function fornecedor() {
-        return $this->hasMany('App\Model\Fornecedor');
+        return $this->hasMany('App\Models\Fornecedor');
     }
 }

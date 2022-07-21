@@ -30,7 +30,7 @@ Route::resource('/despesas', App\Http\Controllers\Dashboard\DespesasController::
 
 Route::middleware('administrador')->group(function () {
     Route::resource('/admin/empresas', App\Http\Controllers\Admin\EmpresasController::class);
-    Route::get('/admin/usuarios/{empresa?}', [App\Http\Controllers\Admin\EmpresaUsuariosControlelr::class, 'criar_usuario_empresa'])->name('criar_usuario');
-    Route::resource('/admin/usuarios', App\Http\Controllers\Admin\EmpresaUsuariosControlelr::class);
+    //Route::get('/admin/usuarios/{empresa?}', [App\Http\Controllers\Admin\EmpresaUsuariosControlelr::class, 'criar_usuario_empresa'])->name('criar_usuario');
+    Route::resource('/empresa.usuarios', App\Http\Controllers\Admin\EmpresaUsuariosControlelr::class);
         
 });
