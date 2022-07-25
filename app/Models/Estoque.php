@@ -10,6 +10,7 @@ class Estoque extends Model
     protected $fillable = [
         'loja_id',
         'codbar',
+        'i_grade_id',
         'tam',
         'situacao',
         'cor',
@@ -23,6 +24,11 @@ class Estoque extends Model
     }
 
     public function produto() {
-        return $this->hasOne('App\Models\Produto');
+        return $this->hasOne('App\Models\Produto', 'id', 'produto_id');
+    }
+
+
+    public function produtos() {
+        return $this->hasMany('App\Models\Produto', 'id', 'produto_id');
     }
 }

@@ -40,7 +40,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled">
 
     @if (auth()->user())
   

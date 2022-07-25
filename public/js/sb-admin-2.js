@@ -8,7 +8,6 @@
     if ($(".sidebar").hasClass("toggled")) {
       $('.sidebar .collapse').collapse('hide');
     };
-    console.log('a');
   });
 
   // Close any open menu accordions when window is resized below 768px

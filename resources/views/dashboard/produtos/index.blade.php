@@ -3,101 +3,71 @@
 
 @section('content')
     <div class="container-fluid">
-
-        <div class="row">
-
+        
+        <form action="{{ route('produtos.index') }}" method="GET" class="row">
+            @csrf
             <div class="col-xl-3 col-md-6 mb-4">
-
-                <label for="basic-url" class="form-label">Data inicial</label>
+                <label for="basic-url" class="form-label">Loja :</label>
                 <div class="input-group mb-3">
-                    <input type="date" class="form-control" id="basic-url">
-                </div>
-
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-
-                <label for="basic-url" class="form-label">Data final</label>
-                <div class="input-group mb-3">
-                    <input type="date" class="form-control" id="basic-url">
-                </div>
-
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <label for="basic-url" class="form-label">Controle</label>
-                <div class="input-group mb-3">
-                    <select class="form-select">
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select name="loja" class="form-select">
+                        @foreach (auth()->user()->lojas as $l)
+                            <option value="{{ $l->id }}">{{ $l->nome }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
-       
+            <div class="col-md-6 mb-4">
+                <label for="basic-url" class="form-label mx-2">Nome do produto</label>
+                <div class="input-group mb-3">
+                    <input type="text" placeholder="Nome" name="produto" class="form-control">
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4 mt-4">
 
-        <div class="col-xl-3 col-md-6 mb-4 mt-4">
+                <button type="submit" class="btn btn-outline-primary mt-2">Buscar</button>
+            </div>
+        </form>
 
-            <button type="button" class="btn btn-outline-primary mt-2">Buscar</button>
-        </div>
-    </div>
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4 mt-2">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Consulta de estoque</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4 mt-2">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Consulta de estoque</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    
+                    @if (count($produtos))
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col">Custo</th>
+                                    <th scope="col">Venda</th>
+                                    <th scope="col">Saldo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Data</th>
-                            <th scope="col">Controle</th>
-                            <th scope="col">Documento</th>
-                            <th scope="col">Movimento</th>
-                            <th scope="col">Espécie</th>
-                            <th scope="col">Valor</th>
-                            <th scope="col">Parcs</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                    </tbody>
-                </table>
+                                @foreach ($produtos as $p)
+                                @if ($p->estoque)
+                                <tr>
+                                    <td>{{ $p->nome }}</td>
+                                    <td>{{ $p->custo }}</td>
+                                    <td>{{ $p->preco }}</td>
+                                  
+                                    <td>{{ ($p->estoque->saldo) }}</td>
 
+                                </tr>         
+                                @endif
+                                  
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    @else
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
-
-
-
-
-
-
     </div>
 @endsection

@@ -14,6 +14,12 @@ class Produto extends Model
         return $this->belongsTo('App\Models\Loja');
     }
 
+
+    public function estoque()
+    {
+        return $this->hasOne('App\Models\Estoque');
+    }
+
     public function estoques()
     {
         return $this->hasOne('App\Models\Estoque');

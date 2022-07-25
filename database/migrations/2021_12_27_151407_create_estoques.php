@@ -18,6 +18,7 @@ class CreateEstoques extends Migration
             $table->unsignedBigInteger('loja_id');
             $table->string('alltech_id')->nullable();
             $table->string('codbar')->nullable();
+            $table->unsignedBigInteger('i_grade_id')->nullable();
             $table->string('tam')->nullable();
             $table->string('cor')->nullable();
             $table->string('produto_id')->nullable();
@@ -25,6 +26,9 @@ class CreateEstoques extends Migration
             $table->timestamps();
 
             $table->foreign('loja_id')->references('id')->on('lojas')->onDelete('cascade');
+
+            $table->foreign('i_grade_id')->references('id')->on('igrades');
+
 
         });
     }
@@ -39,6 +43,9 @@ class CreateEstoques extends Migration
         Schema::table('estoques', function (Blueprint $table) {
             $table->dropForeign('estoques_loja_id_foreign');
             $table->dropColumn('loja_id');
+
+            $table->dropForeign('estoques_i_grade_id_foreign');
+            $table->dropColumn('i_grade_id');
         });
         Schema::dropIfExists('estoques');
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Caixa;
+use Illuminate\Support\Facades\Session;
 
 class CaixaController extends Controller
 {
@@ -12,9 +14,36 @@ class CaixaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard.caixa.index');
+        $controles = [];
+        $caixas = [];
+
+        if ($request->dataInicial && $request->dataFinal) {
+            $caixas = Caixa::where('loja_id', $request->loja)
+                ->whereDate('data', '>=', $request->dataInicial)
+                ->whereDate('data', '<=', $request->dataFinal)->orderBy('data')
+                ->get();
+
+            foreach ($caixas as $key => $c) {
+                $controles[] = $c->controle;
+            }
+
+            if ($request->controle) {
+               
+                $caixas = $caixas->where('controle', $request->controle);
+            }
+  
+            $caixas = $caixas->count() ? $caixas->toQuery()->paginate(10) : [];
+
+            $controles = array_unique($controles);
+
+            Session::put('controle', $request->controle ? $request->controle : false);
+            Session::put('datas', [$request->dataInicial, $request->dataFinal]);
+           
+        }
+
+        return view('dashboard.caixa.index', compact('caixas', 'controles'));
     }
 
     /**

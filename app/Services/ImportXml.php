@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\CidadeIbge;
-use App\Model\Produto;
-use App\Model\Loja;
+use App\Models\Produto;
+use App\Models\Loja;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
 
@@ -778,30 +778,32 @@ class ImportXml
                     $loja->estoques()->create([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim($dado['CODBAR']) : null,
+                        'i_grade_id' => array_key_exists('ID_TAM', $dado) ? trim($dado['ID_TAM']) : null,
                         'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
                         'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
                         //'situacao' => strval($dado['SITUACAO']),
                     ]);
-                    //   echo 'cr '.trim($dado['CODBAR']) . '\n';
+                       echo 'cr '.trim($dado['CODBAR']) . '\n';
                     // $importado++;
                 } else {
 
                     $produto_estoque->update([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim(strval($dado['CODBAR'])) : null,
+                        'i_grade_id' => array_key_exists('ID_TAM', $dado) ? trim($dado['ID_TAM']) : null,
                         'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
                         'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
                         //'situacao' => strval($dado['SITUACAO']),
                     ]);
-                    //  echo 'up ' . trim($dado['CODBAR']) . "\n";
+                      echo 'up ' . trim($dado['CODBAR']) . "\n";
                     // echo $quantidade ? $quantidade :  $key_dado . "\n";
                     //$importado++;
                 }
-                echo trim($dado['CODBAR']) . "\n";
+                // echo trim($dado['CODBAR']) . "\n";
             }
         }
 
@@ -924,8 +926,7 @@ class ImportXml
                 'loja'  => null
             ];
         } catch (\Exception $e) {
-
-            // function utf8_for_xml para caso tenha caracter especial e não conseguir rodar o utf8_encode
+            // funçao utf8_for_xml, com regex caso tenha caracteres especias do xml
             $xml        = simplexml_load_string($this->utf8_for_xml(Storage::get($filename)), "SimpleXMLElement", LIBXML_NOCDATA);
             $json       = json_encode($xml);
             $dados      = json_decode($json, TRUE);
