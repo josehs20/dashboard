@@ -40,6 +40,7 @@ class CaixaController extends Controller
 
             Session::put('controle', $request->controle ? $request->controle : false);
             Session::put('datas', [$request->dataInicial, $request->dataFinal]);
+            Session::put('loja', $request->loja);
            
         }
 

@@ -27,6 +27,10 @@ class Estoque extends Model
         return $this->hasOne('App\Models\Produto', 'id', 'produto_id');
     }
 
+    public function iGrade() {
+        return $this->hasOne('App\Models\Igrade', 'id', 'i_grade_id');
+    }
+
 
     public function produtos() {
         return $this->hasMany('App\Models\Produto', 'id', 'produto_id');

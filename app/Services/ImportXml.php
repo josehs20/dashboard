@@ -764,7 +764,6 @@ class ImportXml
 
             if ($produto) {
                 $quantidade = $dado[$key];
-
                 //codbar verificação no estoque
                 if ($produto->grade_id) {
 
@@ -778,7 +777,7 @@ class ImportXml
                     $loja->estoques()->create([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim($dado['CODBAR']) : null,
-                        'i_grade_id' => array_key_exists('ID_TAM', $dado) ? trim($dado['ID_TAM']) : null,
+                        'i_grade_id' => array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? trim($dado['ID_TAM']) : null,
                         'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
                         'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
                         'produto_id'    => $produto->id,
@@ -792,7 +791,7 @@ class ImportXml
                     $produto_estoque->update([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim(strval($dado['CODBAR'])) : null,
-                        'i_grade_id' => array_key_exists('ID_TAM', $dado) ? trim($dado['ID_TAM']) : null,
+                        'i_grade_id' => array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? trim($dado['ID_TAM']) : null,
                         'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
                         'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
                         'produto_id'    => $produto->id,

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Produto;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Session;
+
 
 class ProdutosController extends Controller
 {
@@ -16,24 +17,27 @@ class ProdutosController extends Controller
      */
     public function index(Request $request)
     {
-// dd($request->all());
-        if ($request->produto) {
+        $produtos = [];
 
-            $produtos = Produto::with('estoques')->where('loja_id',  $request->loja)
-                ->where('situacao', 'A')->whereRaw("nome like '%{$request->produto}%'")->whereHas('estoque', function (Builder $query) {
-                $query->whereNotNull('codbar');
-            })->get();
+        if ($request->produto && $request->loja) {
 
-            return view('dashboard.produtos.index', compact('produtos'));
+            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja)
+                ->whereRaw("nome like '%{$request->produto}%'")->get()->reject(function ($produto) {
+                    return $produto->estoque == null;
+                });
+            $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];
         } else {
+            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja ? $request->loja : auth()->user()->loja_id)
+                ->where('situacao', 'A')->get()->reject(function ($produto) {
+                    return $produto->estoque == null;
+                });
 
-            $produtos = Produto::with('estoque')->where('loja_id',  1)
-                ->where('situacao', 'a')->whereHas('estoque', function (Builder $query) {
-                    $query->whereNotNull('codbar');
-                })->paginate(30);
-
-            return view('dashboard.produtos.index', compact('produtos'));
+            $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];;
         }
+
+        Session::put('loja', $request->loja);
+
+        return view('dashboard.produtos.index', compact('produtos'));
     }
 
     /**

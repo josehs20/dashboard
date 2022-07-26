@@ -12,7 +12,7 @@
                 <div class="input-group mb-3">
                     <select name="loja" class="form-select">
                         @foreach (auth()->user()->lojas as $l)
-                            <option value="{{ $l->id }}">{{ $l->nome }}</option>
+                            <option {{ Session::get('loja') == $l->id ? 'selected' : ''}} value="{{ $l->id }}">{{ $l->nome }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -23,7 +23,7 @@
                 <label for="basic-url" class="form-label">Data inicial</label>
                 <div class="input-group mb-3">
                     <input required name="dataInicial"
-                        value="{{ Session::get('datas')[0] ? Session::get('datas')[0] : '' }}" type="date"
+                        value="{{ !Session::get('datas') ? '' : Session::get('datas')[0] }}" type="date"
                         class="form-control" id="basic-url">
                 </div>
 
@@ -33,7 +33,7 @@
                 <label for="basic-url" class="form-label">Data final</label>
                 <div class="input-group mb-3">
                     <input required name="dataFinal" type="date"
-                        value="{{ Session::get('datas')[1] ? Session::get('datas')[1] : '' }}" class="form-control"
+                        value="{{ !Session::get('datas') ? '' : Session::get('datas')[1] }}" class="form-control"
                         id="basic-url">
                 </div>
 

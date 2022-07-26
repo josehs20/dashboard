@@ -22,7 +22,7 @@ class Produto extends Model
 
     public function estoques()
     {
-        return $this->hasOne('App\Models\Estoque');
+        return $this->hasMany('App\Models\Estoque');
     }
 
     public function saldo($loja_id)
