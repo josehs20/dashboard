@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->perfil == 'administrador';
     }
 
+    public function adminVenda()
+    {
+        return $this->perfil == 'adminVenda';
+    }
+
     public function lojas()
     {
         return $this->belongsToMany('App\Models\Loja');

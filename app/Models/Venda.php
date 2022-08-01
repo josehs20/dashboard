@@ -11,7 +11,8 @@ class Venda extends Model
     protected $fillable = [
         'alltech_id',
         'loja_id',
-       // 'nvenda',
+        'vendedor',
+        'descAcres',
         'data',
         'total',
         'data_cancelamento',

@@ -21,11 +21,12 @@
                 <label for="basic-url" class="form-label">Posição :</label>
                 <div class="input-group mb-3">
                     <select name="posicao" class="form-select">
-                        
-                            <option value="PG">Pago</option>
-                            <option value="AB">Aberto</option>
-                            <option value="CA">Cancelado</option>
-                        
+                        @foreach ($posicoes as $text => $p)
+                            <option {{ Session::get('posicao') == $p ? 'selected' : '' }} value="{{ $p }}">
+                                {{ $text }}</option>
+                        @endforeach
+
+
                     </select>
                 </div>
             </div>
@@ -40,7 +41,8 @@
 
                 <label for="basic-url" class="form-label">Data inicial</label>
                 <div class="input-group mb-3">
-                    <input required type="date" value="{{ !Session::get('datas') ? '' : Session::get('datas')[0] }}" name="dataInicial" class="form-control" id="basic-url">
+                    <input required type="date" value="{{ !Session::get('datas') ? '' : Session::get('datas')[0] }}"
+                        name="dataInicial" class="form-control" id="basic-url">
                 </div>
 
             </div>
@@ -48,7 +50,8 @@
 
                 <label for="basic-url" class="form-label">Data final</label>
                 <div class="input-group mb-3">
-                    <input required type="date" value="{{ !Session::get('datas') ? '' : Session::get('datas')[1] }}" name="dataFinal" class="form-control" id="basic-url">
+                    <input required type="date" value="{{ !Session::get('datas') ? '' : Session::get('datas')[1] }}"
+                        name="dataFinal" class="form-control" id="basic-url">
                 </div>
 
             </div>
@@ -59,6 +62,46 @@
             </div>
 
         </form>
+        <!-- Card Money -->
+        <div class="row d-flex justify-content-center">
+
+            @include('templates.inc.cardMoney', [
+                'borda' => 'info',
+                'titulo' => 'Total',
+                'valor' => count($receitas)
+                    ? reais($valores['valorAb'] + $valores['valorPg'] + $valores['valorCa'])
+                    : '0,00',
+                'icone' => 'fas fa-dollar-sign fa-2x text-gray-300',
+                'textColor' => 'info',
+                'col' => '3',
+            ])
+
+            @include('templates.inc.cardMoney', [
+                'borda' => 'warning',
+                'titulo' => 'Total em aberto',
+                'valor' => count($receitas) ? reais($valores['valorAb']) : '0,00',
+                'icone' => 'fas fa-dollar-sign fa-2x text-gray-300',
+                'textColor' => 'warning',
+                'col' => '3',
+            ])
+            @include('templates.inc.cardMoney', [
+                'borda' => 'success',
+                'titulo' => 'Total Pago',
+                'valor' => count($receitas) ? reais($valores['valorPg']) : '0,00',
+                'icone' => 'fas fa-dollar-sign fa-2x text-gray-300',
+                'textColor' => 'success',
+                'col' => '3',
+            ])
+            @include('templates.inc.cardMoney', [
+                'borda' => 'danger',
+                'titulo' => 'Total cancelado',
+                'valor' => count($receitas) ? reais($valores['valorCa']) : '0,00',
+                'icone' => 'fas fa-dollar-sign fa-2x text-gray-300',
+                'textColor' => 'danger',
+                'col' => '3',
+            ])
+        </div>
+
         <!-- DataTales Example -->
         <div class="card shadow mb-4 mt-2">
             <div class="card-header py-3">
@@ -71,70 +114,40 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Cliente</th>
+                                    <th scope="col">Nota</th>
                                     <th scope="col">Detalhes</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($receitas as $key => $cliente)
-                                    <tr onclick="noneCollapse('noneCollapse<?php echo $key; ?>')" data-bs-toggle="collapse"
-                                        href="#clienteReceita{{ $key }}" role="button" aria-expanded="false"
+
+                                @foreach ($receitas as $key => $r)
+                                    <tr onclick="noneCollapse('noneCollapse<?php echo $r->nota; ?>')" data-bs-toggle="collapse"
+                                        href="#clienteReceita{{ $r->nota }}" role="button" aria-expanded="false"
                                         aria-controls="collapseExample">
-                                        <td>{{ current($cliente)[0]->cliente->nome }}</td>
+                                        <td>{{ $r->cliente->nome }}</td>
+                                        <td>{{ $r->nota }}</td>
 
                                         <td><i class="ri-arrow-up-down-line"></i></td>
                                     </tr>
-                                    <tr style="width: 120%;" class="row">
-                                        <td id="noneCollapse{{ $key }}" class="d-none">
-                                            <div class="collapse" id="clienteReceita{{ $key }}">
-                                                <div class="card card-body">
 
-                                                    <div class="table-responsive">
-                                                        <table class="table table-hover">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Nota</th>
-                                                                    <th scope="col">Emissão</th>
-                                                                    <th scope="col">Vencimento</th>
-                                                                    <th scope="col">Valor</th>
-                                                                    <th scope="col">V.Aberto</th>
-                                                                    <th scope="col">Parcela</th>
-                                                                    <th scope="col">Posição</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach ($cliente as $chave => $notas)
-                                                               
-                                                                    @foreach ($notas as $n)
-                                                                    
-                                                                        <tr>
-                                                                            <td>{{ $n->nota }}</td>
-                                                                            <td>{{date('d/m/Y', strtotime($n->emissao)) }}</td>
-                                                                            <td>{{date('d/m/Y', strtotime($n->vencimento)) }}</td>
-                                                                            <td>{{ $n->valor }}</td>
-                                                                            <td>{{ $n->valor_aberto }}</td>
-                                                                            <td>{{ $n->parcela }}</td>
-                                                                            <td>{{ $n->posicao }}</td>
 
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @endforeach
+                                    <tr>
+                                        <td colspan="3" class="collapse" id="clienteReceita{{ $r->nota }}">
+                                            <div class="card card-body d-flex justify-content-center">
+                                                @include('dashboard.receitas.inc.tabela-receita')
 
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    {{-- @foreach ($cliente as $n)
-                                        {{ dd($n) }}
-                                    @endforeach --}}
                                 @endforeach
-
-
                             </tbody>
                         </table>
+                        {{-- Paginação --}}
+                        <div id="paginate">
+
+                            {{ $receitas->withQueryString()->links() }}
+                        </div>
                     @else
                         <div class="alert alert-warning" role="alert">
                             Nenhum registro encontrado!

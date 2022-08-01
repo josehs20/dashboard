@@ -35,4 +35,8 @@ class VendaItem extends Model
     {
         return $this->belongsTo("App\Models\Venda");
     }
+    public function estoque()
+    {
+        return $this->belongsTo("App\Models\Estoque");
+    }
 }

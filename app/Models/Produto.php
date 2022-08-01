@@ -20,6 +20,11 @@ class Produto extends Model
         return $this->hasOne('App\Models\Estoque');
     }
 
+    public function estoqueItem()
+    {
+        return $this->hasOne('App\Models\Estoque');
+    }
+
     public function estoques()
     {
         return $this->hasMany('App\Models\Estoque');

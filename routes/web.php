@@ -20,13 +20,19 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 Route::resource('/dashboard', App\Http\Controllers\Dashboard\HomeController::class);
+Route::get('/grafico-pie', [App\Http\Controllers\Dashboard\HomeController::class, 'grafico_pie']);
+Route::get('/grafico-area', [App\Http\Controllers\Dashboard\HomeController::class, 'grafico_area']);
 Route::resource('/caixa', App\Http\Controllers\Dashboard\CaixaController::class);
 Route::resource('/vendas', App\Http\Controllers\Dashboard\VendasController::class);
 Route::get('/produtos-mais-vendidos', [App\Http\Controllers\Dashboard\VendasController::class, 'produtos_mais_vendidos'])->name('produtos_mais_vendidos');
 Route::resource('/produtos', App\Http\Controllers\Dashboard\ProdutosController::class);
 Route::resource('/receitas', App\Http\Controllers\Dashboard\ReceitasController::class);
 Route::resource('/despesas', App\Http\Controllers\Dashboard\DespesasController::class);
+
+Route::resource('/admin-vendedores', App\Http\Controllers\AdminVendas\VendedoresController::class);
 
 Route::middleware('administrador')->group(function () {
     Route::resource('/admin/empresas', App\Http\Controllers\Admin\EmpresasController::class);

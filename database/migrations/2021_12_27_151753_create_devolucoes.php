@@ -17,7 +17,8 @@ class CreateDevolucoes extends Migration
             $table->id();
             $table->unsignedBigInteger('loja_id');
             $table->string('alltech_id');
-            //$table->string('nvenda')->nullable();
+            $table->string('vendedor')->nullable();
+            $table->decimal('descAcres')->nullable();
             $table->date('data');
             $table->decimal('total')->nullable();
             $table->string('tipo')->nullable();

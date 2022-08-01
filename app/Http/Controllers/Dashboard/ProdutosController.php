@@ -28,11 +28,11 @@ class ProdutosController extends Controller
             $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];
         } else {
             $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja ? $request->loja : auth()->user()->loja_id)
-                ->where('situacao', 'A')->get()->reject(function ($produto) {
+                ->get()->reject(function ($produto) {
                     return $produto->estoque == null;
                 });
 
-            $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];;
+            $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];
         }
 
         Session::put('loja', $request->loja);

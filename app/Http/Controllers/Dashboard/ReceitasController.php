@@ -18,6 +18,7 @@ class ReceitasController extends Controller
     public function index(Request $request)
     {
         $receitas = [];
+        $valores = ['valorAb'=> [], 'valorPg'=> [], 'valorCa'=> []];
 
         if ($request->cliente) {
             $nome = $request->cliente;
@@ -25,35 +26,47 @@ class ReceitasController extends Controller
             $consulta = Receita::with('cliente')
                 ->where('loja_id', $request->loja)->whereHas('cliente', function (Builder $query) use ($nome) {
                     $query->where('nome', 'like', '%' . $nome . '%');
-                })->whereDate('emissao', '>=', $request->dataInicial)
-                ->whereDate('vencimento', '<=', $request->dataFinal)
-                ->orderBy('emissao')
-                ->get();
+                })->whereIn('posicao', $request->posicao ? [$request->posicao] : ['AB', 'PG', 'CA'])
+                ->whereDate('emissao', '>=', $request->dataInicial)->whereDate('vencimento', '<=', $request->dataFinal)
+                ->orderBy('emissao');
         } else {
 
             $consulta = Receita::with('cliente')
                 ->where('loja_id', $request->loja ? $request->loja : auth()->user()->loja_id)
-                ->whereDate('emissao', '>=', date("Y-m-d", strtotime("-3 month")))
-                ->whereDate('vencimento', '<=', date("Y-m-d", strtotime("3 month")))->orderBy('emissao')
-                ->get();
+                ->whereIn('posicao', $request->posicao ? [$request->posicao] : ['AB', 'PG', 'CA'])
+                ->whereDate('emissao', '>=', $request->dataInicial ? $request->dataInicial : date("Y-m-d", strtotime("-3 month")))
+                ->whereDate('vencimento', '<=', $request->dataFinal ? $request->dataFinal : date("Y-m-d", strtotime("3 month")))
+                ->orderBy('emissao');
         }
 
-        // organiza as contas em aberta caso seja o mesmo usuario 
-        //veirifica a nota caso nao tenha a nota cria array com notas
-        foreach ($consulta as $key => $r) {
-            if ($r->cliente && $r->cliente->id) {
-                if (!array_key_exists($r->cliente->id, $receitas)) {
-                    $receitas[$r->cliente->id][$r->nota][] = $r;
-                } elseif (!array_key_exists($r->nota, $receitas[$r->cliente->id])) {
-                    $receitas[$r->cliente->id][$r->nota][] = $r;
-                } else {
-                    $receitas[$r->cliente->id][$r->nota][] = $r;
+        //cria paginação e o grupo de receita por nota 
+        $receitasCollection = $consulta->get();
+        $receitasCollection = $receitasCollection->groupBy('nota');
+
+        $receitas = $consulta->groupBy('receitas.nota')->paginate(10);
+
+        //separa valores para soma na view
+        foreach ($receitasCollection as $key => $notas) {
+            foreach ($notas as $key => $n) {
+                if ($n->posicao == "AB") {
+                    $valores['valorAb'][] = $n->valor_aberto;
+                } elseif ($n->posicao == "PG") {
+                    $valores['valorPg'][] = $n->valor;
+                } elseif ($n->posicao == "CA") {
+                    $valores['valorCa'][] = $n->valor;
                 }
             }
         }
+        foreach ($valores as $key => $value) {
+            $valores[$key] = array_sum($value);
+        }
+       // dd($valores);
         Session::put('datas', [$request->dataInicial, $request->dataFinal]);
+        Session::put('posicao', $request->posicao);
+        Session::put('loja', $request->loja);
+        $posicoes = ['Todas' => '0', 'Pago' => 'PG', 'Aberto' => 'AB', 'Cancelado' => 'CA'];
 
-        return view('dashboard.receitas.index', compact('receitas'));
+        return view('dashboard.receitas.index', compact('receitas', 'receitasCollection', 'posicoes', 'valores'));
     }
 
     /**

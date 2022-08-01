@@ -43,8 +43,8 @@
 <body id="page-top" class="sidebar-toggled">
 
     @if (auth()->user())
-  
-        <div id="wrapper">
+
+        <div style="display: flex !important;" id="wrapper">
 
             @include('templates.sidebar')
 
@@ -90,8 +90,9 @@
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 
 <!-- Page level custom scripts -->
-<script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-<script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
+<script src="{{ asset('chart/chart-area-demo.js') }}"></script>
+<script src="{{ asset('chart/chart-pie-demo.js') }}"></script>
+
 
 
 <script>

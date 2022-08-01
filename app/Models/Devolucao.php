@@ -12,7 +12,8 @@ class Devolucao extends Model
         'alltech_id',
         'loja_id',
         'tipo',
-        //'nvenda',
+        'vendedor',
+        'descAcres',
         'data',
         'total',
         'data_cancelamento'

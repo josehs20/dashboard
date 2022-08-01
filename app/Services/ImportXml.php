@@ -151,7 +151,8 @@ class ImportXml
                     'alltech_id'        => $alltech_id,
                     'data'              => $data,
                     'tipo'              => strval($dado['TIPO']),
-                    // 'nvenda'            => trim(strval($dado['NVENDA'])),
+                    'vendedor'          => $dado['VENDOR'] ? preg_replace('/\D/', '', trim(strval($dado['VENDOR']))) : null,
+                    'descAcres'         => $dado['DESCACRES'] ? $dado['DESCACRES'] : null,
                     'total'             => $dado['VTOTAL'],
                     'data_cancelamento' => (isset($dado['CANCELADO']) and is_string($dado['CANCELADO']) and strlen($dado['CANCELADO']) >= 8) ? \Carbon\Carbon::createFromFormat('Ymd', substr($dado['CANCELADO'], 0, 8)) : null,
                 ];
