@@ -2,9 +2,9 @@
 
 
 @section('content')
-    @if (Session::has('error'))
+    @if (Session::has('success'))
 
-        <body onload="aletMessage(null, 'error', '<?php echo Session::get('error'); ?>')">
+        <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
     @endif
 
     <div class="container-fluid">

@@ -80,7 +80,7 @@ class AddFunarioToSyncCommande extends Command
                         'nome' => strval(trim($dado['NOME'])),
                         'alltech_id' => preg_replace('/\D/', '', trim($dado['CODIGO'])),
                         'tipo' => strval(trim($dado['TIPO'])),
-                        'status' => 'Inativo',
+                        'status' => 'inativo',
                     ]);
                     echo $dado['NOME'].'.';
                 } else {

@@ -1,5 +1,5 @@
 
-function aletMessage(msg, tipo, texto) {
+function alertMessage(msg, tipo, texto) {
   Swal.fire({
     position: 'top-end',
     icon: tipo,

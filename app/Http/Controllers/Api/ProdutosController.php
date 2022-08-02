@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\AdminVendas;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Produto;
 use Illuminate\Http\Request;
 
-class VendedoresController extends Controller
+class ProdutosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,18 +15,9 @@ class VendedoresController extends Controller
      */
     public function index()
     {
-        dd('a');
-        return view('admin-vendas.index');
-    }
+        $produtos = Produto::with('estoques')->where('loja_id', '1')->take(10)->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($produtos, 200);
     }
 
     /**
@@ -46,17 +38,6 @@ class VendedoresController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

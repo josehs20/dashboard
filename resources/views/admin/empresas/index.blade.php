@@ -10,7 +10,7 @@
     </style>
     @if (Session::has('success'))
 
-        <body onload="aletMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
+        <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
     @endif
     <div class="container-fluid">
 
@@ -60,7 +60,7 @@
                                                         class="ri-contacts-fill iconsIndexAdmin"></i></a></td>
                                         @else
                                             <td><a
-                                                    onclick="aletMessage(null, 'warning', 'Empresa precisa ser sincronizada')"><i
+                                                    onclick="alertMessage(null, 'warning', 'Empresa precisa ser sincronizada')"><i
                                                         class="ri-contacts-fill iconsIndexAdmin"></i></a></td>
                                         @endif
                                         <td><a href="{{ route('empresas.edit', $em->id) }}"><i

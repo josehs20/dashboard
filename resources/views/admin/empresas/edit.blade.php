@@ -4,7 +4,7 @@
 @section('content')
     @if (Session::has('success'))
 
-        <body onload="aletMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
+        <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
     @endif
     <div class="container-fluid">
 

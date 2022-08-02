@@ -21,8 +21,8 @@ class Funario extends Model
         return $this->belongsTo('App\Models\Empresa');
     }
 
-    public function user()
+    public function usuario()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 }

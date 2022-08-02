@@ -5,17 +5,37 @@
             <th scope="col">Vendedor</th>
             <th scope="col">Total</th>
             <th scope="col">Custos</th>
+            <th scope="col">Devolução</th>
+            <th scope="col">Cancelamento</th>
             <th scope="col">Percentual de lucro</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($venda as $v)
-            @if ($v && $v->itens)
+        @if ($venda['vendedores'])
+
+            @foreach ($venda['vendedores'] as $vendedor => $v)
+           
+                
+                <tr>
+
+                   <td>{{ $vendedor == '0-NI' ? 'Não informado' : substr($vendedor, 2) }}</td>
+                   <td>{{ reais($v['total']) }}</td>
+                   <td>{{ reais($v['custo']) }}</td>
+                   <td>{{ reais($v['TotalDiaDevolucao']) }}</td>
+                   <td>{{ reais($v['TotalDiaCancelamento']) }}</td>
+                   <td>{{ number_format($v['percentual'], 2, '.', ' ').  ' %' }}</td>
+                    {{-- <td>{{ $v->data_cancelamento ? 'Cancelado': ($v->tipo == 'D' ? 'Devolução' : $v->tipo) }}</td>
+                    <td>{{ 'R$' . reais($v->total) }}</td>  --}}
+                 
+                </tr>
+
+            
+                {{-- @if ($v && $v->itens)
                 <tr style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalItensVenda{{ $v->id }}">
                     <td>{{ $v->alltech_id }}</td>
                     <td>{{ $v->data_cancelamento ? 'Cancelado': ($v->tipo == 'D' ? 'Devolução' : $v->tipo) }}</td>
                     <td>{{ 'R$' . reais($v->total) }}</td>
-                </tr>
+                </tr> --}}
 
                 {{-- Modal itens da venda Muito pesado --}}
                 {{-- <div class="modal fade" id="modalItensVenda{{ $v->id }}" tabindex="-1"
@@ -49,7 +69,8 @@
                         </div>
                     </div>
                 </div> --}}
-            @endif
-        @endforeach
+                {{-- @endif --}}
+            @endforeach
+        @endif
     </tbody>
 </table>

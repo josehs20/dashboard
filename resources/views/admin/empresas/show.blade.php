@@ -10,7 +10,7 @@
     </style>
     @if (Session::has('success'))
 
-        <body onload="aletMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
+        <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
     @endif
     <div class="container-fluid">
 
@@ -46,7 +46,7 @@
                                     <tr>
                                         <td>{{ $us->name }}</td>
                                         <td>{{ $us->email }}</td>
-                                        <td>{{ $us->perfil == 'adminVenda' ? 'Admin venda' : 'Somente consulta' }}</td>
+                                        <td>{{ $us->perfil == 'adminVenda' ? 'Admin venda' : ($us->perfil == 'vendedor' ? 'Vendedor Externo' : 'Somente consulta') }}</td>
                                         <td>{{ $us->loja->alltech_id }}
                                         </td>
 

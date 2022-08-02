@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'dasboard', 'titlePage' => __('Dasboard'), 'inicio' => 'dashboard.index'])
 
 @section('content')
+    @if (Session::has('success'))
+       
+        <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
+    @endif
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <!-- Page Heading -->
@@ -22,7 +26,7 @@
                                 <div id="vendas" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
-                                 <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i> 
+                                <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -38,7 +42,7 @@
                                 <div id="custos" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
-                                 <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i> 
+                                <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -54,7 +58,7 @@
                                 <div id="devolucoes" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
-                                 <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i> 
+                                <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -70,7 +74,7 @@
                                 <div id="lucro" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
-                                 <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i> 
+                                <i class="mr-3 fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>

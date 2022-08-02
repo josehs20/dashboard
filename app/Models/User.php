@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Loja');
     }
+
+    public function funcionario()
+    {
+        return $this->hasOne('App\Models\Funario');
+    }
 }

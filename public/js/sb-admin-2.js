@@ -10,6 +10,28 @@
     };
   });
 
+  $(function () {
+    var div = document.querySelector("#accordionSidebar");
+    var buttonNav = document.querySelector("#sidebarToggleTop")
+     $(document).on("click", function(e) {
+       var fora = !div.contains(e.target);
+       var buttonnavFora = !buttonNav.contains(e.target)
+       console.log(buttonnavFora);
+        if (fora && buttonnavFora && !$(".sidebar").hasClass("toggled")) {
+          $("body").toggleClass("sidebar-toggled");
+          $(".sidebar").toggleClass("toggled");
+          if ($(".sidebar").hasClass("toggled")) {
+            $('.sidebar .collapse').collapse('hide');
+            var nametopBar = document.getElementById("userDropdown");
+            nametopBar.children[0].classList.toggle("d-none");
+          };
+        }
+    //   if (fora) $(divNome).slideDown("slow/400/fast");
+    //   console.log(fora ? 'Fora!' : 'Dentro!');
+  });
+  })
+
+
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function () {
     if ($(window).width() < 768) {

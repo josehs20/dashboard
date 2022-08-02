@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'vendas', 'titlePage' => __('Resumo de vendas'), 'inicio' => 'dashboard.index'])
 
 
 @section('content')
     <div class="container-fluid">
-
 
         <form action="{{ route('vendas.index') }}" method="GET" class="row">
             @csrf
@@ -85,7 +84,7 @@
                 @include('templates.inc.cardMoney', [
                     'borda' => 'danger',
                     'titulo' => 'Cancelamento',
-                    'valor' => '-' . reais($valores['totalCancelamento']),
+                    'valor' => $valores['totalCancelamento'] == 0 ? $valores['totalCancelamento'] :'-' . reais($valores['totalCancelamento']),
                     'icone' => 'fas fa-dollar-sign fa-2x text-gray-300',
                     'textColor' => 'danger',
                     'col' => '4',
@@ -155,11 +154,10 @@
                                         <tr>
                                             <td colspan="7" class="collapse" id="resumoDia{{ $resumoDia->id }}">
                                                 <div class="card card-body d-flex justify-content-center">
+                
                                                     @include('dashboard.vendas.inc.tabela-resumo-dia', [
                                                         'venda' =>
-                                                            $resumoPd[date('Y-m-d', strtotime($resumoDia->data))][
-                                                                'itens'
-                                                            ],
+                                                            $resumoPd[date('Y-m-d', strtotime($resumoDia->data))],
                                                     ])
                                                 </div>
                                             </td>

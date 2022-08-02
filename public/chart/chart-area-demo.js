@@ -38,7 +38,7 @@ function consultaValores() {
     async: false,
     success: function (response) {
       let totais = response;
-      Object.keys(totais).forEach((item) => {    
+      Object.keys(totais).forEach((item) => {
         valores.push({
           data: totais[item].data,
           total: totais[item].total,
@@ -55,18 +55,18 @@ function consultaValores() {
 var valores = consultaValores();
 
 function valoresCards(data) {
-  var totais = { total : 0 , custo : 0, devolucoes : 0, lucro : 0, };
-Object.keys(data).forEach((item) => {    
+  var totais = { total: 0, custo: 0, devolucoes: 0, lucro: 0, };
+  Object.keys(data).forEach((item) => {
     totais.total += data[item].total
     totais.custo += data[item].custo
     totais.devolucoes += data[item].devolucoes
     totais.lucro += data[item].lucro
   });
-  console.log(totais);
-document.getElementById('vendas').innerText = totais.total.toLocaleString('pt-br', {minimumFractionDigits: 2});
-document.getElementById('custos').innerText = totais.custo.toLocaleString('pt-br', {minimumFractionDigits: 2});
-document.getElementById('devolucoes').innerText = totais.devolucoes.toLocaleString('pt-br', {minimumFractionDigits: 2});
-document.getElementById('lucro').innerText = totais.lucro.toLocaleString('pt-br', {minimumFractionDigits: 2});
+
+  document.getElementById('vendas').innerText = totais.total.toLocaleString('pt-br', { minimumFractionDigits: 2 });
+  document.getElementById('custos').innerText = totais.custo.toLocaleString('pt-br', { minimumFractionDigits: 2 });
+  document.getElementById('devolucoes').innerText = totais.devolucoes.toLocaleString('pt-br', { minimumFractionDigits: 2 });
+  document.getElementById('lucro').innerText = totais.lucro.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 }
 
 // Area Chart Example
@@ -92,35 +92,35 @@ var resumoDeGanhos = new Chart(ctx, {
         data: valores.map(function (e) { return e.total; }),
       },
       {
-      label: "Lucro",
-      lineTension: 0.3,
-      backgroundColor: "rgba(100, 115, 223, 0.25)",
-      borderColor: "#006400",
-      pointRadius: 3,
-      pointBackgroundColor: "#006400",
-      pointBorderColor: "#006400",
-      pointHoverRadius: 3,
-      pointHoverBackgroundColor: "#006400",
-      pointHoverBorderColor: "#006400",
-      pointHitRadius: 10,
-      pointBorderWidth: 2,
-      data: valores.map(function (e) { return e.lucro; }),
-    },
-    {
-      label: "Custos",
-      lineTension: 0.3,
-      backgroundColor: "rgba(78, 115, 223, 0.15)",
-      borderColor: "rgb(255, 104, 104)",
-      pointRadius: 3,
-      pointBackgroundColor: "rgb(255, 104, 104)",
-      pointBorderColor: "rgb(255, 104, 104)",
-      pointHoverRadius: 1,
-      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-      pointHitRadius: 1,
-      pointBorderWidth: 1,
-      data: valores.map(function (e) { return e.custo; }),
-    }
+        label: "Lucro",
+        lineTension: 0.3,
+        backgroundColor: "rgba(100, 115, 223, 0.25)",
+        borderColor: "#006400",
+        pointRadius: 3,
+        pointBackgroundColor: "#006400",
+        pointBorderColor: "#006400",
+        pointHoverRadius: 3,
+        pointHoverBackgroundColor: "#006400",
+        pointHoverBorderColor: "#006400",
+        pointHitRadius: 10,
+        pointBorderWidth: 2,
+        data: valores.map(function (e) { return e.lucro; }),
+      },
+      {
+        label: "Custos",
+        lineTension: 0.3,
+        backgroundColor: "rgba(78, 115, 223, 0.15)",
+        borderColor: "rgb(255, 104, 104)",
+        pointRadius: 3,
+        pointBackgroundColor: "rgb(255, 104, 104)",
+        pointBorderColor: "rgb(255, 104, 104)",
+        pointHoverRadius: 1,
+        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+        pointHitRadius: 1,
+        pointBorderWidth: 1,
+        data: valores.map(function (e) { return e.custo; }),
+      }
     ],
   },
   options: {

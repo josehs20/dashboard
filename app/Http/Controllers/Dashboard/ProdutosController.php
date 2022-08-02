@@ -18,17 +18,19 @@ class ProdutosController extends Controller
     public function index(Request $request)
     {
         $produtos = [];
-
+        //Precisa trazer a relação um pra um e um pra n para produtos com grade estoque e estoques
         if ($request->produto && $request->loja) {
-
+            $codbar = $request->produto;
             $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja)
-                ->whereRaw("nome like '%{$request->produto}%'")->get()->reject(function ($produto) {
+                ->where('nome', 'like', $request->produto)->orWhere('alltech_id', 'like', $request->produto)
+                ->take(1000)->get()->reject(function ($produto) {
                     return $produto->estoque == null;
                 });
+            // dd($produtos);
             $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];
         } else {
             $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja ? $request->loja : auth()->user()->loja_id)
-                ->get()->reject(function ($produto) {
+                ->take(1000)->get()->reject(function ($produto) {
                     return $produto->estoque == null;
                 });
 
