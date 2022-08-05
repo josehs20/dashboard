@@ -29,7 +29,7 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
         <!-- Nav Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item {{ $activePage == 'empresas' ? 'active' : '' }}">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
                 <i class="ri-community-line" style="font-size: 25px !important;"></i>
@@ -45,7 +45,7 @@
             </div>
         </li>
 
-        <li class="nav-item mb-3">
+        <li class="nav-item mb-3 {{ $activePage == 'empresas' ? 'active' : '' }}">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePagesConta"
                 aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" style="font-size: 20px !important;"></i>

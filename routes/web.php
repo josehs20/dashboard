@@ -40,8 +40,9 @@ Route::middleware('adminVenda')->group(function () {
 Route::middleware('administrador')->group(function () {
     Route::resource('/admin/empresas', App\Http\Controllers\Admin\EmpresasController::class);
     Route::resource('/empresa.usuarios', App\Http\Controllers\Admin\EmpresaUsuariosControlelr::class);
-    Route::get('/admin/prodile/', [\App\Http\Controllers\Profiles\ConfiguracoesController::class, 'profile_admin'])->name('profile_admin');
+    Route::get('/admin/profile/', [\App\Http\Controllers\Profiles\ConfiguracoesController::class, 'profile_admin'])->name('profile_admin');
 });
+
 Route::get('/admin/venda/profile', [\App\Http\Controllers\Profiles\ConfiguracoesController::class, 'profile_adminVenda'])->name('profile_adminVenda');
 Route::put('/admin/profile/update', [\App\Http\Controllers\Profiles\ConfiguracoesController::class, 'update_profile'])->name('update_profile');
 

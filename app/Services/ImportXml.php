@@ -772,34 +772,37 @@ class ImportXml
                 } else {
                     $produto_estoque =  $loja->estoques()->where('produto_id', $produto->id)->first();
                 }
-
+               
+                $id_grade_id = array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? $loja->iGrades()->where('alltech_id', preg_replace('/\D/', '', trim(intval($dado['ID_TAM']))))->first()->id : null;
+                // $id_cor = array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? $loja->iGrades()->where('alltech_id', preg_replace('/\D/', '', trim(strval($dado['COR']))))->first() : null;
+               
                 if (!$produto_estoque) {
 
                     $loja->estoques()->create([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim($dado['CODBAR']) : null,
-                        'i_grade_id' => array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? trim($dado['ID_TAM']) : null,
-                        'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
-                        'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
+                        'i_grade_id' => $id_grade_id,
+                        // 'tam'    => $id_tam,
+                        //  'cor'    => $id_cor,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
                         //'situacao' => strval($dado['SITUACAO']),
                     ]);
-                       echo 'cr '.trim($dado['CODBAR']) . '\n';
+                    
                     // $importado++;
                 } else {
 
                     $produto_estoque->update([
                         'alltech_id'    => $produto_alltech_id,
                         'codbar'    => array_key_exists('CODBAR', $dado) ? trim(strval($dado['CODBAR'])) : null,
-                        'i_grade_id' => array_key_exists('ID_TAM', $dado) && trim($dado['ID_TAM']) != '0.' ? trim($dado['ID_TAM']) : null,
-                        'tam'    => array_key_exists('TAM', $dado) &&  trim($dado['TAM']) != '' ? trim(strval($dado['TAM'])) : null,
-                        'cor'    => array_key_exists('COR', $dado) &&  preg_replace('/\D/', '', trim($dado['COR'])) != '0' ? preg_replace('/\D/', '', intval(trim($dado['COR']))) : null,
+                        'i_grade_id' => $id_grade_id,
+                        // 'tam'    => $id_tam,
+                        //  'cor'    => $id_cor,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
                         //'situacao' => strval($dado['SITUACAO']),
                     ]);
-                      echo 'up ' . trim($dado['CODBAR']) . "\n";
+                    
                     // echo $quantidade ? $quantidade :  $key_dado . "\n";
                     //$importado++;
                 }

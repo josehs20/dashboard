@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'empresas', 'titlePage' => __('Criar usuário'), 'inicio' => 'empresas.index'])
 
 
 @section('content')
@@ -6,7 +6,6 @@
 
 <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
 @endif
-
     <div class="container-fluid">
 
         <div class="card shadow mb-4 mt-2">

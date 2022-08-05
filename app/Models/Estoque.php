@@ -35,4 +35,8 @@ class Estoque extends Model
     public function produtos() {
         return $this->hasMany('App\Models\Produto', 'id', 'produto_id');
     }
+
+    public function produt() {
+        return $this->hasOne('App\Models\Produto', 'id', 'produto_id');
+    }
 }

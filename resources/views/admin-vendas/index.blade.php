@@ -55,14 +55,14 @@
                                                         data-bs-target="#modalAtivar{{ $v->id }}"
                                                         class="btn btn-outline-primary">Ativar</a></td>
 
-                                                <td><a href="{{ route('admin.vendedores.edit', ['admin' => auth()->user()->id, 'vendedore' => $v->id]) }}"
+                                                <td><a href="{{ route('admin.vendedores.edit', ['admin' => auth()->user()->id, 'vendedore' => encrypt($v->id)]) }}"
                                                         class="btn btn-outline-primary">Editar</a></td>
                                             @else
                                                 <td><a data-bs-toggle="modal"
                                                         data-bs-target="#modalDesativar{{ $v->id }}"
                                                         class="btn btn-outline-danger">Desativar</a></td>
 
-                                                <td><a href="{{ route('admin.vendedores.edit', ['admin' => auth()->user()->id, 'vendedore' => $v->id]) }}"
+                                                <td><a href="{{ route('admin.vendedores.edit', ['admin' => auth()->user()->id, 'vendedore' => encrypt($v->id)]) }}"
                                                         class="btn btn-outline-primary">Editar</a></td>
                                             @endif
 
@@ -122,8 +122,8 @@
                                                 </div>
                                             </div>
                                         @else
-                                            {{-- rota esta como admin mas o id passado é o vendedor de funário --}}
-                                            <td><a href="{{ route('admin.vendedores.create', $v->id) }}"
+                                            {{-- rota esta como admin funário --}}
+                                            <td><a href="{{ route('admin.vendedores.create', encrypt($v->id)) }}"
                                                     class="btn btn-outline-primary">Registrar</a></td>
                                         @endif
 

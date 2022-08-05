@@ -20,17 +20,7 @@ class VendasController extends Controller
     public function index(Request $request)
     {
         $resumo = ['venda' => [], 'devolucao' => []];
-        $resumoPd = [];
-        $custo = [];
-        $valores = [
-            'totalCusto' => null,
-            'totalDevolucao' => null,
-            'totalCancelamento' => null,
-            'totalLucro' => null,
-            'totalAvista' => null,
-            'totalAprazo' => null
-        ];
-
+       
         $consulta['venda'] = Venda::with('itens')->where('loja_id', $request->loja ? $request->loja : auth()->user()->loja_id)
             ->whereBetween('data', [$request->dataInicial ? $request->dataInicial : date("Y-m-d", strtotime('-3 month')), $request->dataFinal ? $request->dataFinal : date("Y-m-d", strtotime('3 month'))]);
 
@@ -62,7 +52,15 @@ class VendasController extends Controller
     public function estruturaVendas($consulta)
     {
         $vendedores = Funario::where('empresa_id', auth()->user()->loja->empresa->id)->get();
-
+        $resumoPd = [];
+        $valores = [
+            'totalCusto' => null,
+            'totalDevolucao' => null,
+            'totalCancelamento' => null,
+            'totalLucro' => null,
+            'totalAvista' => null,
+            'totalAprazo' => null
+        ];
         foreach ($consulta as $tipo => $r) {
             foreach ($r as $tipoV => $vendas) {
                 foreach ($vendas as $key => $v) {

@@ -53,13 +53,15 @@ class deleteRegistroAntigo extends Command
 
     public function deleteRegistroAntigo($loja)
     {
-            $loja->caixas()->where('data', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->vendas()->where('data', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->devolucoes()->where('data', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->vendaItens()->where('data', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->devolucaoItens()->where('data', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->receitas()->where('emissao', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
-            $loja->despesas()->where('emissao', '<=', date("Y-m-d H:i:s", strtotime("-12 month")))->delete();
+        $data = date("Y-m-d H:i:s", strtotime("-12 month"));
+
+            $loja->caixas()->where('data', '<=', $data)->delete();
+            $loja->vendas()->where('data', '<=', $data)->delete();
+            $loja->devolucoes()->where('data', '<=', $data)->delete();
+            $loja->vendaItens()->where('data', '<=', $data)->delete();
+            $loja->devolucaoItens()->where('data', '<=', $data)->delete();
+            $loja->receitas()->where('emissao', '<=', $data)->delete();
+            $loja->despesas()->where('emissao', '<=', $data)->delete();
 
     }
 }

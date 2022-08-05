@@ -3,19 +3,52 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Estoque;
 use App\Models\Produto;
+use App\Repositories\EstoqueProdutoRepository;
 use Illuminate\Http\Request;
 
 class ProdutosController extends Controller
 {
+    //produtos são diretamente relacionados com estoque 
+    //por isso a instancia de estoque para as consultas
+    public function __construct(Estoque $estoque)
+    {
+        $this->estoque = $estoque;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $produtos = Produto::with('estoques')->where('loja_id', '1')->take(10)->get();
+        $estoqueProdutoRepository = new EstoqueProdutoRepository($this->estoque);
+        $loja_id = auth('api')->user()->loja_id;
+    
+        if ($request->has('atr_produto')) {
+            $atributos_produto = 'produto:id,' . $request->atr_produto;
+            // $estoques = Estoque::where('loja_id', $loja_id)->with('produtos:id,' . $atributos_produto)->take(10);
+            $estoqueProdutoRepository->selectAtributosProduto($loja_id, $atributos_produto);
+        } else {
+            $produtos = 'produto';
+            $estoqueProdutoRepository->selectAtributosProduto($loja_id, $produtos);
+            // $estoques = Estoque::where('loja_id', $loja_id)->with('produtos')->take(10);
+        }
+
+        if ($request->has('filtro')) {
+            $tabela = 'produtos';
+            $estoqueProdutoRepository->filtrosHas($loja_id, $tabela, $request->filtro);
+        }
+
+        if ($request->has('atr_estoque')) {
+
+            $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
+        } else {
+            $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
+        }
+
+        $produtos = $estoqueProdutoRepository->get_estoque_produto();
 
         return response()->json($produtos, 200);
     }

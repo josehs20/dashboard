@@ -36,7 +36,7 @@ class CreateCarrinhosTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
+           // $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
         });
     }
 

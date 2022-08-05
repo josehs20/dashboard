@@ -14,7 +14,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Atualiza vendedor</h6>
             </div>
 
-            <form action="{{ route('admin.vendedores.update', ['admin' => auth()->user()->id ,'vendedore' => $vendedorUsuario->id]) }}" method="POST">
+            <form action="{{ route('admin.vendedores.update', ['admin' => auth()->user()->id ,'vendedore' => encrypt($vendedorUsuario->id)]) }}" method="POST">
                 @method('PUT')
                 @csrf
                 @include('admin-vendas.inc.form', ['lojas' => $lojas, 'usuario' => $vendedorUsuario])
