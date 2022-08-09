@@ -21,6 +21,7 @@ class ProdutosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //
     public function index(Request $request)
     {
         $estoqueProdutoRepository = new EstoqueProdutoRepository($this->estoque);
@@ -31,28 +32,32 @@ class ProdutosController extends Controller
             // $estoques = Estoque::where('loja_id', $loja_id)->with('produtos:id,' . $atributos_produto)->take(10);
             $estoqueProdutoRepository->selectAtributosProduto($loja_id, $atributos_produto);
         } else {
-            $produtos = 'produto';
-            $estoqueProdutoRepository->selectAtributosProduto($loja_id, $produtos);
+            $produto = 'produto';
+            $estoqueProdutoRepository->selectAtributosProduto($loja_id, $produto);
             // $estoques = Estoque::where('loja_id', $loja_id)->with('produtos')->take(10);
         }
 
-        if ($request->has('filtro')) {
+        if ($request->has('filtro_produto')) {
             $tabela = 'produtos';
-            $estoqueProdutoRepository->filtrosHas($loja_id, $tabela, $request->filtro);
+            $estoqueProdutoRepository->filtrosHas_produto($loja_id, $tabela, $request->filtro_produto);
         }
 
         if ($request->has('atr_estoque')) {
 
             $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
-        } else {
-            $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
         }
+
+        if ($request->has('filtro_estoque')) {
+            $estoqueProdutoRepository->filtro_estoque($loja_id, $request->filtro_estoque);
+        }
+        //  else {
+        //     $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
+        // }
 
         $produtos = $estoqueProdutoRepository->get_estoque_produto();
 
         return response()->json($produtos, 200);
     }
-
     /**
      * Store a newly created resource in storage.
      *

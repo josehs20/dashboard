@@ -15,8 +15,8 @@ class AuthController extends Controller
 
         $userVendedor = User::where('email', $credentials['email'])->first();
 
-        if ($userVendedor->perfil != 'vendedor' || !$userVendedor->funcionario || $userVendedor->funcionario->status == 'inativo' 
-        || $userVendedor->email !== $credentials['email']) {
+        if (!$userVendedor || $userVendedor->perfil != 'vendedor' || !$userVendedor->funcionario 
+        || $userVendedor->funcionario->status == 'inativo' || $userVendedor->email !== $credentials['email']) {
             return response()->json(['error' => 'Permissão negada', 'msg' => 'Usuário não é um vendedor registrado, ou não esta ativado para venda externa'], 401);
         }
 
@@ -61,10 +61,10 @@ class AuthController extends Controller
     }
 
 
-    public function get_user_venda_externa()
-    {
-        $user = auth('api')->user();
+    // public function get_user_venda_externa()
+    // {
+    //     $user = auth('api')->user();
         
-        return response()->json(['user' => $user, 'p' => $user->password], 200);
-    }
+    //     return response()->json(['user' => $user, 'p' => $user->password], 200);
+    // }
 }

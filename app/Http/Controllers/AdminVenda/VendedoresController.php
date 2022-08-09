@@ -59,12 +59,15 @@ class VendedoresController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ], $mensagens);
+
         try {
             $funcionario = Funario::find(decrypt($admin));
         } catch (\Exception $e) {
-            Session::flash('error', 'vendedor inválido');
+            Session::flash('error', 'vendedor inválido' . $e->getMessage());
             return redirect()->route('admin.vendedores.index', auth()->user()->id);
         }
+
+        //segurança, verifica se fucionario pertence a mesma empresa do admin venda
         if ($funcionario->empresa->id === auth()->user()->loja->empresa->id) {
 
             $usuario = User::create([
@@ -75,16 +78,25 @@ class VendedoresController extends Controller
                 'perfil' => $request->tipo_admin,
             ]);
 
-            $funcionario->update(['user_id' => $usuario->id, 'status' => 'ativo']);
+            if ($request->tipo_admin == 'vendedor') {
 
-            $this->setLojas($usuario, $request->lojaPadrao);
-
-            Session::flash('success', 'Usuário ' . $usuario->name . ' Criado com sucesso');
-            return redirect()->route('admin.vendedores.index', auth()->user()->id);
-        } else {
-            Session::flash('error', 'vendedor inválido');
-            return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                if ($this->requisicaoStoreVendaExterna($funcionario, $usuario, $request)) {
+                    Session::flash('success', 'Usuário ' . $usuario->name . ' Criado com sucesso');
+                    return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                } else {
+                    Session::flash('error', 'Não foi possível tente novamente em algusn instantes');
+                    return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                }
+            } else {
+                //se não cria só no banco para consulta dashboard
+                $funcionario->update(['user_id' => $usuario->id, 'status' => 'ativo']);
+                $this->setLojas($usuario, $request->lojaPadrao);
+                Session::flash('success', 'Usuário ' . $usuario->name . ' Criado com sucesso');
+                return redirect()->route('admin.vendedores.index', auth()->user()->id);
+            }
         }
+        Session::flash('error', 'vendedor inválido');
+        return redirect()->route('admin.vendedores.index', auth()->user()->id);
     }
 
     /**
@@ -146,22 +158,32 @@ class VendedoresController extends Controller
             //vendedor esta recebendo id do usuario
             $vendedorUsuario = User::find($funcionario->usuario->id);
 
-            $vendedorUsuario->update([
-                'name' =>    $request->name,
-                'email' =>   $request->email,
-                'password' =>   $request->password ? bcrypt($request->password) : $vendedorUsuario->password,
-                'loja_id' => $request->lojaPadrao,
-                'perfil' => $request->tipo_admin,
-            ]);
+            if ($request->tipo_admin == 'vendedor') {
+                $response = $this->requisicaoUpdateVendaExterna($funcionario, $vendedorUsuario, $request);
 
-            $this->setLojas($vendedorUsuario, $request->lojaPadrao);
-
-            Session::flash('success', 'Usuário ' . $vendedorUsuario->name . ' Atualizado com sucesso');
-            return redirect()->route('admin.vendedores.index', auth()->user()->id);
-        } else {
-            Session::flash('error', 'vendedor inválido');
-            return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                if ($response['success']) {
+                    Session::flash('success', 'Usuário ' . $response['funcionario'] . ' Atualizadp com sucesso');
+                    return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                } else {
+                    Session::flash('error', 'Não foi possível tente novamente em alguns');
+                    return redirect()->route('admin.vendedores.index', auth()->user()->id);
+                }
+            } else {
+                $vendedorUsuario->update([
+                    'name' =>    $request->name,
+                    'email' =>   $request->email,
+                    'password' =>   $request->password ? bcrypt($request->password) : $vendedorUsuario->password,
+                    'loja_id' => $request->lojaPadrao,
+                    'perfil' => $request->tipo_admin,
+                ]);
+                $funcionario->update(['user_id' => $vendedorUsuario->id, 'status' => 'ativo']);
+                $this->setLojas($vendedorUsuario, $request->lojaPadrao);
+                Session::flash('success', 'Usuário ' . $vendedorUsuario->name . ' Atualizado com sucesso');
+                return redirect()->route('admin.vendedores.index', auth()->user()->id);
+            }
         }
+        Session::flash('error', 'vendedor inválido');
+        return redirect()->route('admin.vendedores.index', auth()->user()->id);
     }
 
     /**
@@ -197,5 +219,72 @@ class VendedoresController extends Controller
         $user->lojas()->detach();
 
         $user->lojas()->attach($loja);
+    }
+
+
+    // -----------------Requisições venda externa---------------
+
+    //cria user para logar como auth no app, venda externa
+    private function requisicaoStoreVendaExterna($funcionario, $usuario, $request)
+    {
+        $token = ['api-key-alltech' => config('app.api_key_alltech')];
+
+        $response =  Http::withHeaders($token)->post('http://localhost:8001/api/create/user/venda-externa', [
+            'name' =>    $request->name,
+            'email' =>   $request->email,
+            'password' =>   bcrypt($request->password),
+            'loja' => $request->lojaPadrao,
+            'perfil' => $request->tipo_admin,
+            'user_alltech' =>$usuario->id,
+        ]);
+
+        $response = $response->object();
+        if ($response->success == true) {
+            
+            $funcionario->update(['user_id' => $usuario->id, 'status' => 'ativo']);
+
+            $this->setLojas($usuario, $request->lojaPadrao);
+
+            Session::flash('success', 'Usuário ' . $usuario->name . ' Criado com sucesso');
+            return redirect()->route('admin.vendedores.index', auth()->user()->id);
+        } else {
+            $usuario->delete();
+            $response->success = false;
+        }
+        return $response->success;
+    }
+
+    private function requisicaoUpdateVendaExterna($funcionario, $vendedorUsuario, $request)
+    {
+        $token = ['api-key-alltech' => config('app.api_key_alltech')];
+        //mandar os parametros de acordo com nome no model user
+        $response =  Http::withHeaders($token)->put('http://localhost:8001/api/update/user/venda-externa/' . $vendedorUsuario->id, [
+            'name' =>    $request->name,
+            'email' =>   $request->email,
+            'password' =>   $request->password ? bcrypt($request->password) : $vendedorUsuario->password,
+            'loja' => $request->lojaPadrao,
+            'perfil' => $request->tipo_admin,
+        ]);
+
+        $response = $response->object();
+        
+        if ($response->success == true) {
+
+            $vendedorUsuario->update([
+                'name' =>    $request->name,
+                'email' =>   $request->email,
+                'password' =>   $request->password ? bcrypt($request->password) : $vendedorUsuario->password,
+                'loja_id' => $request->lojaPadrao,
+                'perfil' => $request->tipo_admin,
+            ]);
+
+            $funcionario->update(['user_id' => $vendedorUsuario->id, 'status' => 'ativo']);
+
+            $this->setLojas($vendedorUsuario, $request->lojaPadrao);
+
+            return $response = ['success' => true, 'funcionario' => $funcionario->nome];
+        } else {
+            return $response = ['success' => false];
+        }
     }
 }
