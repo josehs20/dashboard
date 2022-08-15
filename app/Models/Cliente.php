@@ -34,6 +34,6 @@ class Cliente extends Model
     }
     public function enderecos()
     {
-        return $this->hasMany('App\Models\Endereco');
+        return $this->hasOne('App\Models\Endereco');
     }
 }

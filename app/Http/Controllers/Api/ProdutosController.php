@@ -48,7 +48,8 @@ class ProdutosController extends Controller
         }
 
         if ($request->has('filtro_estoque')) {
-            $estoqueProdutoRepository->filtro_estoque($loja_id, $request->filtro_estoque);
+            //pega por id ou codbar
+            $estoqueProdutoRepository->filtro_estoque($request->filtro_estoque);
         }
         //  else {
         //     $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);

@@ -26,6 +26,6 @@ Route::prefix('v1')->middleware('apiJwtVendedor')->group( function () {
     Route::post('auth/refresh', [\App\Http\Controllers\Api\AuthController::class, 'refresh']);
   
     Route::get('/estoques/produtos/', [\App\Http\Controllers\Api\ProdutosController::class, 'index']);
-    Route::get('/clientes/');
+    Route::get('/clientes/', [\App\Http\Controllers\Api\ClientesController::class, 'index']);
    // http://localhost:8000/api/v1/estoque/produtos/ids?estoque_ids=1,2,3,45&atr_produto=nome,preco'
 });

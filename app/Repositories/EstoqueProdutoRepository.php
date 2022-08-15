@@ -28,13 +28,13 @@ class EstoqueProdutoRepository {
         });
     }
 
-    public function filtro_estoque($loja, $filtros)
+    public function filtro_estoque($filtros)
     {
         $filtros = explode(';', $filtros);
         foreach ($filtros as $key => $condicao) {
             $c = explode(':', $condicao);
             $in = explode(',', $c[2]);
-            //dd($in);
+           // dd($in);
             $this->model = $this->model->whereIn($c[0], $in);
         }
     }
