@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,12 +34,32 @@ return [
             'driver' => 'sync',
         ],
 
-        'database' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
+        'redis' => [
+            // 'driver' => 'database',
+            // 'table' => 'jobs',
+            // 'queue' => 'default',
+            // 'retry_after' => 90,
+            // 'after_commit' => false,
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'sincronizando'),
             'retry_after' => 90,
+            'block_for' => null,
             'after_commit' => false,
+        ],
+
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'appVenda'),
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+            // 'driver' => 'database',
+            // 'table' => 'jobs',
+            // 'queue' => 'appVenda',
+            // 'retry_after' => 90,
+            // 'after_commit' => false,
         ],
 
         'beanstalkd' => [
@@ -65,7 +85,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'default'),
+            'queue' => env('REDIS_QUEUE', 'default', 'appVenda', 'sincronizando'),
             'retry_after' => 90,
             'block_for' => null,
             'after_commit' => false,

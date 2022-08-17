@@ -22,4 +22,8 @@ class Endereco extends Model
     {
         return $this->belongsTo('App\Models\Cliente');
     }
+
+    public function cidadeIbge() {
+        return $this->belongsTo('App\Models\CidadeIbge', 'cidade_ibge_id', 'id');
+    }
 }

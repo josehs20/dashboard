@@ -30,6 +30,10 @@ class Empresa extends Model
         return $this->hasMany('App\Models\ArquivoImportado');
     }
 
+    public function arquivosExp() {
+        return $this->hasMany('App\Models\ArquivoExportado');
+    }
+    
     public function fornecedor() {
         return $this->hasMany('App\Models\Fornecedor');
     }
