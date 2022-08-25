@@ -753,7 +753,6 @@ class ImportXml
 
     public function insereEstoque($loja, $dado, $key)
     {
-        //monta consulta de loja pela chave da loja existente no arquivo
         $situacao = array_key_exists('SITUACAO', $dado) ? $dado['SITUACAO'] : null;
         $produto_estoque = false;
         $produto_alltech_id = array_key_exists('CODIGO', $dado) && preg_replace('/\D/', '', trim(strval($dado['CODIGO']))) != '' ? preg_replace('/\D/', '', trim(strval($dado['CODIGO']))) : null;
@@ -929,7 +928,7 @@ class ImportXml
                 'loja'  => null
             ];
         } catch (\Exception $e) {
-            // funçao utf8_for_xml, com regex caso tenha caracteres especias do xml
+            // funçao utf8_for_xml, com regex caso tenha caracteres especias no xml
             $xml        = simplexml_load_string($this->utf8_for_xml(Storage::get($filename)), "SimpleXMLElement", LIBXML_NOCDATA);
             $json       = json_encode($xml);
             $dados      = json_decode($json, TRUE);

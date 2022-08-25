@@ -52,91 +52,71 @@ class ClienteRepository
     {
         return $this->model->orderBy('nome')->get();
     }
+
+    public function getClienteLimit($limit)
+    {
+        return $this->model->take($limit)->orderBy('nome')->get();
+    }
     public function getCidades()
     {
         return $this->model->get();
     }
 
-    public function create_dado_cliente($cliente, $endereco)
+    public function clienteEnderecosCidadesIbge($clientes)
     {
-        // $dados['cliente'] = explode(';', $cliente);
-        // $dados['endereco'] = explode(';', $endereco);
+        foreach ($clientes as $key => $c) {
+            if ($c->enderecos && $c->enderecos->cidadeIbge) {
+                $c->enderecos = $c->enderecos->cidadeIbge;
+            }
+        }
+        return $clientes;
+    }
 
-        // foreach ($dados as $key => $values) {
-        //     foreach ($values as $keyDado => $v) {
-        //         $d = explode('=', $v);
-        //         if ($d[0] == 'cidade_ibge_id') {
-        //             $cidade = CidadeIbge::where('codigo', $d[1])->first();
-        //             $dados[$key][$d[0]] = $cidade ? $cidade->id : null;
-        //         } else {
-        //             $dados[$key][$d[0]] = $d[1];
-        //         }
-        //         unset($dados[$key][$keyDado]);
-        //     }
-        // }
-
-        $dados = $this->filtraUrlCrudCliente($cliente, $endereco);
-
-        $verificaCliente = Cliente::where('docto', $dados['cliente']['docto'])->first();
-
+    public function create_dado_cliente($dados)
+    {
+        $verificaCliente = Cliente::where('docto', $dados['create_cliente']['docto'])->first();
+      
         if ($verificaCliente) {
             return ['verificaCliente' => $verificaCliente];
         }
+     
+        $cidade = CidadeIbge::where('codigo', $dados['endereco']['cidade_ibge_id'])->first();
+        $dados['endereco']['cidade_ibge_id'] = $cidade->id;
 
         $lojas = auth('api')->user()->loja->empresa->lojas;
         $cliente = '';
         foreach ($lojas->reverse() as $key => $l) {
-            $cliente = $l->clientes()->create($dados['cliente']);
+            $cliente = $l->clientes()->create($dados['create_cliente']);
             $cliente->enderecos()->create($dados['endereco']);
         }
 
-        return ['cliente' => $cliente];
+        return $this->exportCliente($cliente);
     }
 
-
-    public function update_dado_cliente($cliente, $endereco, $id)
+    public function update_dado_cliente($dados, $id)
     {
-        $dados = $this->filtraUrlCrudCliente($cliente, $endereco);
-
-        $cliente = Cliente::find($id);
-     
+        $cliente = Cliente::with('enderecos')->find($id);
         $lojas = auth('api')->user()->loja->empresa->lojas;
         $alltech_id = $cliente->alltech_id;
+
+        $cidade = CidadeIbge::where('codigo', $dados['endereco']['cidade_ibge_id'])->first();
+        $dados['endereco']['cidade_ibge_id'] = $cidade->id;
+
         foreach ($lojas as $key => $loja) {
             $c = $loja->clientes()->where('alltech_id', $alltech_id)->first();
-            if ($c) {   
-                $c->update($dados['cliente']); 
-                $c->enderecos->update($dados['endereco']);        
+            if ($c) {
+                $c->update($dados['update_cliente']);
+                $c->enderecos->update($dados['endereco']);
             }
         }
-       
-        return $cliente;
-    }
 
-    public function filtraUrlCrudCliente($cliente, $endereco)
-    {
-        $dados['cliente'] = explode(';', $cliente);
-        $dados['endereco'] = explode(';', $endereco);
+        $cliente = Cliente::with('enderecos')->find($id);
 
-        foreach ($dados as $key => $values) {
-            foreach ($values as $keyDado => $v) {
-                $d = explode('=', $v);
-                if ($d[0] == 'cidade_ibge_id') {
-                    $cidade = CidadeIbge::where('codigo', $d[1])->first();
-                    $dados[$key][$d[0]] = $cidade ? $cidade->id : null;
-                } else {
-
-                    $dados[$key][$d[0]] = $d[1];
-                }
-                unset($dados[$key][$keyDado]);
-            }
-        }
-        return $dados;
+        return $this->exportCliente($cliente);
     }
 
     public function exportCliente($cliente)
     {
-        
         $cliente = $cliente;
 
         $dados = [
@@ -160,10 +140,10 @@ class ClienteRepository
             'compto' => $cliente->enderecos->compto,
             'tipo_endereco' => 'R',
         ];
-      
+
         $dir = $cliente->loja->empresa->pasta;
         $json =  json_encode($dados, JSON_PRETTY_PRINT);
-      
+
         //Class de Jobs para exportação 
         ExportaClienteJob::dispatch($json, $dir)->onQueue('appVenda');
 

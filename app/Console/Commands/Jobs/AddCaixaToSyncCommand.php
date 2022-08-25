@@ -55,7 +55,7 @@ class AddCaixaToSyncCommand extends Command
                     ]);
 
                     $job = (new AddCaixaToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('sincronizando');
+                    dispatch($job)->onQueue('empresa_lojas_clientes');
                     
                     echo "Added {$file}\n";
                 }                 

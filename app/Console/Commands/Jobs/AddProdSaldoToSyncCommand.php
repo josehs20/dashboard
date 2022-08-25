@@ -55,7 +55,7 @@ class AddProdSaldoToSyncCommand extends Command
                     ]);
 
                     $job = (new AddProdSaldoToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('sincronizando');
+                    dispatch($job)->onQueue('vendasProdSaldos');
                     
                     echo "Added {$file}\n";
                 }

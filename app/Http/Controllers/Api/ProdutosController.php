@@ -51,13 +51,19 @@ class ProdutosController extends Controller
             //pega por id ou codbar
             $estoqueProdutoRepository->filtro_estoque($request->filtro_estoque);
         }
-        //  else {
-        //     $estoqueProdutoRepository->selectAtributosEstoque($request->atr_estoque);
-        // }
 
         $produtos = $estoqueProdutoRepository->get_estoque_produto();
 
         return response()->json($produtos, 200);
+    }
+
+    public function exportVenda(Request $request)
+    {
+        $estoqueProdutoRepository = new EstoqueProdutoRepository($this->estoque);
+        if ($request->has('json')) {
+           $msg = $estoqueProdutoRepository->create_exportacao_venda(json_decode($request->json));
+           return response()->json($msg, 200);
+        }
     }
     /**
      * Store a newly created resource in storage.

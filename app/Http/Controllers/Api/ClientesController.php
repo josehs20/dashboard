@@ -34,8 +34,17 @@ class ClientesController extends Controller
         if ($request->has('filtro_cliente')) {
             $clienteRepository->filtroCliente($request->filtro_cliente);
         }
+        
+        $clientes = [];
+        if ($request->has('limit')) {
+            $clientes = $clienteRepository->getClienteLimit($request->limit);
+        } else {
+            $clientes = $clienteRepository->getCliente();
+        }
 
-        $clientes = $clienteRepository->getCliente();
+        if (count($clientes)) {
+            $clientes = $clienteRepository->clienteEnderecosCidadesIbge($clientes);
+        }
 
         return response()->json($clientes);
     }
@@ -56,14 +65,14 @@ class ClientesController extends Controller
     public function create_cliente(Request $request)
     {
         $clienteRepository = new ClienteRepository($this->cliente);
-        if ($request->has('create_cliente') && $request->has('endereco')) {
+        if ($request->has('json')) {
+            $dados = json_decode($request->json, TRUE);
+            
+            $cliente = $clienteRepository->create_dado_cliente($dados);
 
-            $cliente = $clienteRepository->create_dado_cliente($request->create_cliente, $request->endereco);
             if (array_key_exists('verificaCliente', $cliente)) {
                 return response()->json($cliente, 400);
             }
-
-            $clienteRepository->exportCliente($cliente['cliente']);
 
             return response()->json($cliente, 200);
         } else {
@@ -74,12 +83,13 @@ class ClientesController extends Controller
     public function update_cliente($id, Request $request)
     {
         $clienteRepository = new ClienteRepository($this->cliente);
-        if ($request->has('update_cliente') && $request->has('endereco')) {
 
-            $cliente = $clienteRepository->update_dado_cliente($request->update_cliente, $request->endereco, $id);
+        if ($request->has('json')) {
+            $dados = json_decode($request->json, TRUE);
+  
+            $cliente = $clienteRepository->update_dado_cliente($dados, $id);
 
-             $clienteRepository->exportCliente($cliente);
-            
+            // $clienteRepository->exportCliente($cliente);
             return response()->json($cliente, 200);
         }
     }

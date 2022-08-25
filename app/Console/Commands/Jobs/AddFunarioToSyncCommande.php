@@ -61,7 +61,7 @@ class AddFunarioToSyncCommande extends Command
         //         }
         //     }
         // }
-        $empresa = Empresa::find(1);
+        $empresa = Empresa::find(3);
 
         $self = new ImportXml;
 

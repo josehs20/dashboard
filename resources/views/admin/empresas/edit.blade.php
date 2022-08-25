@@ -1,4 +1,4 @@
-@extends('layouts.app', , ['activePage' => 'empresas', 'titlePage' => __('Editar empresa'), 'inicio' => 'empresas.index'])
+@extends('layouts.app', ['activePage' => 'empresas', 'titlePage' => __('Editar empresa'), 'inicio' => 'empresas.index'])
 
 
 @section('content')
@@ -21,11 +21,5 @@
             </form>
 
         </div>
-
-
-
-
-
-
     </div>
 @endsection

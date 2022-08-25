@@ -36,41 +36,40 @@ class ExportaClienteJob implements ShouldQueue
     public function handle()
     {
         $empresa = Empresa::where('pasta', $this->dir)->first();
-        $this->dir = 'APPVENDA/'. $this->dir;
+        $this->dir = 'APPVENDA/' . $this->dir;
+   
         Storage::disk('local')->makeDirectory($this->dir);
+        $filesBanco = $empresa->arquivosExp()->where('nome', 'like', '%' . "CLIENTE" . '%')->get();
+        $count = 1;
 
-        $files = Storage::disk('local')->files($this->dir);
-        $count = $empresa->arquivosExp()->where('nome','like', '%'."CLIENTE".'%')->count();
-        $count++;
-        // if (count($files) == 0) {
-            
-        //     Storage::put($this->dir . '/CLIENTE-' . $count . '.json', $this->json);
-        //     $file = $this->dir . '/CLIENTE-' . $count . '.json';
-        // } else {
+        $file = $this->dir . '/CLIENTE-' . $count . '.json';
 
-            // foreach ($files as $key => $file) {
-            //     $arquivoBanco = $this->dir . '/CLIENTE-' . $count . '.json';
-                
-                // if ($this->filePermited($empresa, $file, $arquivoBanco)) {
-                //     $count++;
-                // }
-            // }
-            
-            Storage::put($this->dir . '/CLIENTE-' . $count . '.json', $this->json);
+        while ($filesBanco->where('nome', $file)->first()) {
+            $count++;
             $file = $this->dir . '/CLIENTE-' . $count . '.json';
-        // }
+        }
 
-        //pega da storage local e exporta para ftp
-        // Storage::disk('ftp')->put($file, Storage::get($file));
+        $empresa->arquivosExp()->create(['nome' => $file, 'processado' => 0]);
+        Storage::disk('local')->put($file, $this->json);
 
-        $empresa->arquivosExp()->create(['nome' => $file, 'processado' => 1]);
+        if (!Storage::disk('ftp')->exists($this->dir)) {
+            Storage::disk('ftp')->makeDirectory($this->dir);
+        }
+
+        $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+        if (!$precessado) {
+            $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+            if (!$precessado) {
+                $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+            }
+        }
+
+        if ($precessado) {
+            $empresa->arquivosExp()->where('nome', $file)
+                ->update(['nome' => $file, 'processado' => 1]);
+        }
 
         $empresa->update(['ultima_sincronizacao' => now()]);
         $empresa->logs()->create(['log' => "[Cliente] Exportado Pasta/dir = {$file}"]);
-    }
-
-    private function filePermited($empresa, $file, $arquivoBanco)
-    {
-        return (str_contains($file, 'CLIENTE') and $empresa->arquivosExp()->where('nome', $arquivoBanco)->first());
     }
 }

@@ -33,6 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            'throw' => true,
         ],
 
         'public' => [
@@ -61,6 +62,7 @@ return [
             'root'      => env('FTP_ROOT', '/alltechsistemas.com/SISTEMA/CLOUD'),
             'port'      => env('FTP_PORT', 21),
             'timeout'   => env('FTP_TIMEOUT', 30),
+            'throw' => true,
         ],
 
     ],

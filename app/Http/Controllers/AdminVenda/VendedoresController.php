@@ -165,7 +165,7 @@ class VendedoresController extends Controller
                     Session::flash('success', 'Usuário ' . $response['funcionario'] . ' Atualizadp com sucesso');
                     return redirect()->route('admin.vendedores.index', auth()->user()->id);
                 } else {
-                    Session::flash('error', 'Não foi possível tente novamente em alguns');
+                    Session::flash('error', 'Não foi possível tente novamente em alguns instantes');
                     return redirect()->route('admin.vendedores.index', auth()->user()->id);
                 }
             } else {

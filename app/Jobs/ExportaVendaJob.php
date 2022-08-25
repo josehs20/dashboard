@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Empresa;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,18 +18,18 @@ class ExportaVendaJob implements ShouldQueue
 
     private $json;
     private $dir;
-    private $carrinho;
+    private $loja_alltech_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($json, $dir, $carrinho)
+    public function __construct($json, $dir, $loja_alltech_id)
     {
         $this->json = $json;
         $this->dir = $dir;
-        $this->carrinho = $carrinho;
+        $this->loja_alltech_id = $loja_alltech_id;
     }
 
     /**
@@ -40,49 +41,44 @@ class ExportaVendaJob implements ShouldQueue
     {
         $empresa = Empresa::where('pasta', $this->dir)->first();
 
+        $this->dir = 'APPVENDA/' . $this->dir;
         Storage::disk('local')->makeDirectory($this->dir);
-
-        $files = Storage::disk('local')->files($this->dir);
-
+        $filesBanco = $empresa->arquivosExp()->where('nome', 'like', '%' . "VONLINE" . '%')->get();
         $count = 1;
 
         //numeração de loja para nomear arquivo
-        $num = "000";
-        $num .= $this->carrinho->usuario->loja->alltech_id;
-        $num = substr($num, -3);
+        $num_loja = "000";
+        $num_loja .= $this->loja_alltech_id;
+        $num_loja = substr($num_loja, -3);
 
-        if (count($files) == 0) {
+        $file = $this->dir . '/VONLINE-' . $count . '-' . $num_loja . '.json';
 
-            Storage::put($this->dir . '/VONLINE-' . $count . '-' . $num . '.json', $this->json);
-            $file = $this->dir . '/VONLINE-' . $count . '-' . $num . '.json';
-        } else {
-
-            foreach ($files as $key => $file) {
-                $diretorioBanco = $this->dir . '/VONLINE-' . $count . '-' . $num . '.json';
-                $fileStorage = '/VONLINE-' . $count . '-' . $num;
-                if ($this->filePermited($empresa, $file, $fileStorage, $diretorioBanco)) {
-                    $count++;
-                }
-                //dd($count);
-            }
-            Storage::put($this->dir . '/VONLINE-' . $count . '-' . $num . '.json', $this->json);
-            $file = $this->dir . '/VONLINE-' . $count . '-' . $num . '.json';
+        while ($filesBanco->where('nome', $file)->first()) {
+            $count++;
+            $file = $this->dir . '/VONLINE-' . $count . '-' . $num_loja . '.json';
         }
 
-        //monta diretorio da empresa no ftp caso não tenha 
-        Storage::disk('ftp')->makeDirectory($this->dir);
+        $empresa->arquivosExp()->create(['nome' => $file, 'processado' => 0]);
+        Storage::disk('local')->put($file, $this->json);
 
-        //pega da storage local e exporta para ftp
-        Storage::disk('ftp')->put($file, Storage::get($file));
+        if (!Storage::disk('ftp')->exists($this->dir)) {
+            Storage::disk('ftp')->makeDirectory($this->dir);
+        }
 
-        $empresa->arquivosExp()->create(['nome' => $file, 'processado' => 1]);
+        $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+        if (!$precessado) {
+            $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+            if (!$precessado) {
+                $precessado = Storage::disk('ftp')->put($file, Storage::get($file));
+            }
+        }
+
+        if ($precessado) {
+            $empresa->arquivosExp()->where('nome', $file)
+                ->update(['nome' => $file, 'processado' => 1]);
+        }
 
         $empresa->update(['ultima_sincronizacao' => now()]);
         $empresa->logs()->create(['log' => "[Venda] Exportado Pasta/dir = {$file}"]);
-    }
-
-    private function filePermited($empresa, $file, $fileStorage, $diretorioBanco)
-    {
-        return (str_contains($file, $fileStorage) and $empresa->arquivosExp()->where('nome', $diretorioBanco)->first());
     }
 }

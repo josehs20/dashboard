@@ -61,6 +61,20 @@ return [
             // 'retry_after' => 90,
             // 'after_commit' => false,
         ],
+        
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'vendasProdSaldos'),
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+            // 'driver' => 'database',
+            // 'table' => 'jobs',
+            // 'queue' => 'appVenda',
+            // 'retry_after' => 90,
+            // 'after_commit' => false,
+        ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',
@@ -85,7 +99,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'default', 'appVenda', 'sincronizando'),
+            'queue' => env('REDIS_QUEUE', 'appVenda', 'sincronizando', 'vendasProdSaldos'),
             'retry_after' => 90,
             'block_for' => null,
             'after_commit' => false,

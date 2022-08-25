@@ -33,6 +33,7 @@ class AddProdutoToSyncJob implements ShouldQueue
      */
     public function handle()
     {
+        
         $importados = ImportXml::produtos($this->empresa, $this->filename);
         $this->empresa->arquivos()->where('nome', $this->filename)->update(['processado' => true]);
 
