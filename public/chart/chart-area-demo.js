@@ -2,6 +2,19 @@
 // Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 // Chart.defaults.global.defaultFontColor = '#858796';
 
+function update_dashboard_periodo(valores) {
+ 
+  resumoDeGanhos.data.labels = valores.map(function (e) { return e.data; })
+  resumoDeGanhos.data.datasets[0].data = valores.map(function (e) { return e.total })
+  resumoDeGanhos.data.datasets[1].data = valores.map(function (e) { return e.lucro })
+  resumoDeGanhos.data.datasets[2].data = valores.map(function (e) { return e.custo })
+  resumoDeGanhos.update();
+  // console.log(resumoDeGanhos.data);
+
+  // console.log(resumoDeGanhos.data.datasets[0].backgroundColor = 'black');
+  // resumoDeGanhos.update();
+}
+
 function number_format(number, decimals, dec_point, thousands_sep) {
   // *     example: number_format(1234.56, 2, ',', ' ');
   // *     return: '1 234,56'
@@ -29,11 +42,28 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 //consulta ajax
-function consultaValores() {
+function consulta_grafico_area(periodo) {
+  var periodo = periodo;
   var valores = [];
+
   $.ajax({
+    beforeSend: function () {
+      //mostrando a tela de loading
+      if (periodo) {
+        var button_active = document.getElementById('buttons-meses').querySelectorAll('.active')
+       button_active.forEach(element => {
+        element.classList.remove('active')
+       });
+        var button = document.getElementById(periodo + 'meses')
+        button.classList.add('active')
+        button.innerText = 'Carregando...'
+      }
+    },
     url: "/grafico-area",
     type: "GET",
+    data: {
+      periodo: periodo,
+    },
     dataType: 'json',
     async: false,
     success: function (response) {
@@ -46,14 +76,26 @@ function consultaValores() {
           custo: totais[item].custo
         })
       })
+      // monta_grafico_area(valores)
       valoresCards(totais)
+    },
+    complete: function () {
+      //retirando o loading
+      if (periodo) {
+        document.getElementById(periodo + 'meses').innerText = periodo + ' Meses'
+      }
+      // resumoDeGanhos ? document.getElementById(periodo + 'meses').innerText = periodo + ' Meses' : ''
     }
   })
-
+  if (resumoDeGanhos) {
+    update_dashboard_periodo(valores)
+  }
   return valores
 }
-var valores = consultaValores();
 
+var valores = consulta_grafico_area();
+
+//cards
 function valoresCards(data) {
   var totais = { total: 0, custo: 0, devolucoes: 0, lucro: 0, };
   Object.keys(data).forEach((item) => {
@@ -69,8 +111,14 @@ function valoresCards(data) {
   document.getElementById('lucro').innerText = totais.lucro.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 }
 
-// Area Chart Example
-var ctx = document.getElementById("resumoDeGanhos");
+//grafico area
+// function monta_grafico_area(valores) {
+
+//   $('#resumoDeGanhos').remove();
+//   $('#chart-area-content').append('<canvas id="resumoDeGanhos"><canvas>');
+//   console.log(resumoDeGanhos);
+var ctx = document.getElementById("resumoDeGanhos").getContext('2d');
+
 var resumoDeGanhos = new Chart(ctx, {
   type: 'line',
   data: {
@@ -152,7 +200,8 @@ var resumoDeGanhos = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function (value, index, values) {
-            return '$' + value.tofixed(2);
+            // console.log(typeof value, index, values);
+            return '$' + value;
           }
         },
         gridLines: {
@@ -190,4 +239,4 @@ var resumoDeGanhos = new Chart(ctx, {
     }
   }
 });
-
+// }

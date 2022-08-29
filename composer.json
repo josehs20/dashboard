@@ -32,7 +32,8 @@
         },
         "files": [
             "app/Helpers/MoneyHelper.php",
-            "app/Helpers/PorcentoHelper.php"
+            "app/Helpers/PorcentoHelper.php",
+            "app/Helpers/UrlBaseHelper.php"
         ]
     },
     "autoload-dev": {

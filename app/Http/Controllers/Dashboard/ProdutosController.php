@@ -21,7 +21,7 @@ class ProdutosController extends Controller
         //Precisa trazer a relação um pra um e um pra n para produtos com grade estoque e estoques
         if ($request->produto && $request->loja) {
             $codbar = $request->produto;
-            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja)
+            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('situacao', 'A')->where('loja_id',  $request->loja)
                 ->where('nome', 'like', $request->produto)->orWhere('alltech_id', 'like', $request->produto)
                 ->take(1000)->get()->reject(function ($produto) {
                     return $produto->estoque == null;
@@ -29,7 +29,7 @@ class ProdutosController extends Controller
             // dd($produtos);
             $produtos = $produtos->count() ? $produtos->toQuery()->paginate(30) : [];
         } else {
-            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('loja_id',  $request->loja ? $request->loja : auth()->user()->loja_id)
+            $produtos = Produto::with('estoques', 'estoque', 'grades')->where('situacao', 'A')->where('loja_id',  $request->loja ? $request->loja : auth()->user()->loja_id)
                 ->take(1000)->get()->reject(function ($produto) {
                     return $produto->estoque == null;
                 });

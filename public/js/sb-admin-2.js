@@ -16,7 +16,6 @@
      $(document).on("click", function(e) {
        var fora = !div.contains(e.target);
        var buttonnavFora = !buttonNav.contains(e.target)
-       console.log(buttonnavFora);
         if (fora && buttonnavFora && !$(".sidebar").hasClass("toggled")) {
           $("body").toggleClass("sidebar-toggled");
           $(".sidebar").toggleClass("toggled");
@@ -26,8 +25,6 @@
             nametopBar.children[0].classList.toggle("d-none");
           };
         }
-    //   if (fora) $(divNome).slideDown("slow/400/fast");
-    //   console.log(fora ? 'Fora!' : 'Dentro!');
   });
   })
 

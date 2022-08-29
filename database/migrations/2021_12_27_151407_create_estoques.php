@@ -18,6 +18,7 @@ class CreateEstoques extends Migration
             $table->unsignedBigInteger('loja_id');
             $table->string('alltech_id')->nullable();
             $table->string('codbar')->nullable();
+            $table->string('situacao')->nullable();
             $table->unsignedBigInteger('i_grade_id')->nullable();
             $table->string('tam')->nullable();
             $table->string('cor')->nullable();

@@ -54,7 +54,7 @@ class AddFornecedorToSyncCommand extends Command
                     ]);
 
                     $job = (new AddFornecedorToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('vendasProdSaldos');
+                    dispatch($job)->onQueue('first_queue');
                     
                     echo "Added {$file}\n";
                 }

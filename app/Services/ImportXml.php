@@ -549,12 +549,12 @@ class ImportXml
             }
             //if (array_key_exists('CODIGO', $dado)) {
 
-            foreach ($lojas as $value) {
+            foreach ($lojas as $loja) {
 
                 try {
-                    $loja       = $empresa->lojas()->where('alltech_id', $value->alltech_id)->first();
+                    // $loja       = $empresa->lojas()->where('alltech_id', $value->alltech_id)->first();
 
-                    if ($loja) {
+                    // if ($loja) {
 
                         $alltech_id = preg_replace('/\D/', '', trim(strval($dado['CODIGO'])));
 
@@ -573,7 +573,7 @@ class ImportXml
                             ]);
                             $importado++;
                         }
-                    }
+                    // }
                 } catch (\Exception $e) {
                     echo $e->getMessage() . ' ,' . $filename;
                 }
@@ -670,7 +670,7 @@ class ImportXml
                     //if ($loja && $alltech_id && array_key_exists('UN', $dado) && array_key_exists('VENDA', $dado) && array_key_exists('CUSTO', $dado) && array_key_exists('SITUACAO', $dado) && $dado['SITUACAO'] == 'A') {
                     $produto = $loja->produtos()->where('alltech_id', $alltech_id)->first();
 
-                    if ($dado['SITUACAO'] == 'A') {
+                    if ($dado['SITUACAO']) {
 
                         if (!$produto) {
                             // echo $alltech_id . ".";
@@ -698,10 +698,11 @@ class ImportXml
                             ]);
                             $importado++;
                         }
-                    } elseif ($dado['SITUACAO'] == 'I') {
-                        //} elseif (array_key_exists('SITUACAO', $dado) && $dado['SITUACAO'] == 'I') {     
-                        $produto = $loja->produtos()->where('alltech_id', $alltech_id)->delete();
-                    }
+                    } 
+                    // elseif ($dado['SITUACAO'] == 'I') {
+                    //     //} elseif (array_key_exists('SITUACAO', $dado) && $dado['SITUACAO'] == 'I') {     
+                    //     $produto = $loja->produtos()->where('alltech_id', $alltech_id)->delete();
+                    // }
                 } catch (\Exception $e) {
                     echo $e->getMessage() . ' ,' . $filename;
                 }
@@ -757,7 +758,7 @@ class ImportXml
         $produto_estoque = false;
         $produto_alltech_id = array_key_exists('CODIGO', $dado) && preg_replace('/\D/', '', trim(strval($dado['CODIGO']))) != '' ? preg_replace('/\D/', '', trim(strval($dado['CODIGO']))) : null;
 
-        if ($loja &&  $situacao == 'A') {
+        if ($loja && $situacao) {
 
             //codigo verificação no produto
             $produto = $loja->produtos()->where('alltech_id', $produto_alltech_id)->first();
@@ -785,7 +786,7 @@ class ImportXml
                         //  'cor'    => $id_cor,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
-                        //'situacao' => strval($dado['SITUACAO']),
+                        'situacao' => strval($dado['SITUACAO']),
                     ]);
                     
                     // $importado++;
@@ -799,7 +800,7 @@ class ImportXml
                         //  'cor'    => $id_cor,
                         'produto_id'    => $produto->id,
                         'saldo'         => $quantidade ? $quantidade : 0,
-                        //'situacao' => strval($dado['SITUACAO']),
+                        'situacao' => strval($dado['SITUACAO']),
                     ]);
                     
                     // echo $quantidade ? $quantidade :  $key_dado . "\n";
@@ -809,26 +810,26 @@ class ImportXml
             }
         }
 
-        if ($loja && $situacao == 'I') {
+        // if ($loja && $situacao == 'I') {
 
-            //vem de codbar verificação no estoque
-            $produto = $loja->produtos()->where('alltech_id', $produto_alltech_id)->first();
+        //     //vem de codbar verificação no estoque
+        //     $produto = $loja->produtos()->where('alltech_id', $produto_alltech_id)->first();
 
-            if ($produto) {
+        //     if ($produto) {
 
-                if ($produto->grade_id) {
+        //         if ($produto->grade_id) {
 
-                    $produto_estoque = $loja->estoques()->where('codbar', trim($dado['CODBAR']))->first();
-                    //echo $produto . '.'."\n";
-                    $produto_estoque ? $produto_estoque->delete() : false;
-                } else {
+        //             $produto_estoque = $loja->estoques()->where('codbar', trim($dado['CODBAR']))->first();
+        //             //echo $produto . '.'."\n";
+        //             $produto_estoque ? $produto_estoque->delete() : false;
+        //         } else {
 
-                    $produto_estoque =  $loja->estoques()->where('produto_id', $produto->id)->first();
-                    //echo $produto . ',' . "\n";
-                    $produto_estoque ? $produto_estoque->delete() : false;
-                }
-            }
-        }
+        //             $produto_estoque =  $loja->estoques()->where('produto_id', $produto->id)->first();
+        //             //echo $produto . ',' . "\n";
+        //             $produto_estoque ? $produto_estoque->delete() : false;
+        //         }
+        //     }
+        // }
         // return $importado;
     }
 

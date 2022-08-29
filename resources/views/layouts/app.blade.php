@@ -4,13 +4,13 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    {{-- <meta name="description" content="dashboard">
+    <meta name="author" content=""> --}}
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="imagem/png" href="{{asset('img/logo2.png')}}" />
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,13 +18,13 @@
     <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{asset('plugins/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
+    <link href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    {{-- <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+        rel="stylesheet"> --}}
 
     <!-- Custom styles for this template-->
-    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -41,9 +41,8 @@
 </head>
 
 <body id="page-top" class="sidebar-toggled">
- 
-    @if (auth()->user())
 
+    @if (auth()->user())
         <div style="display: flex !important;" id="wrapper">
 
             @include('templates.sidebar')
@@ -72,7 +71,18 @@
     @endif
 
 
+    <style>
+        #back-to-top {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+        }
+    </style>
 
+    @if (Request::segment(1) != 'dashboard' and Request::segment(1) != 'admin')
+        <a onclick="top_button()" class="btn btn-outline-primary d-none" id="back-to-top"><i
+                class="ri-arrow-up-fill"></i></a>
+    @endif
 
 </body>
 <script src="{{ asset('js/alerts.js') }}" defer></script>
@@ -87,13 +97,6 @@
 {{-- <script src="{{ asset('js/sb-admin-2.min.js') }}"></script> --}}
 <script src="{{ asset('js/sb-admin-2.js') }}"></script>
 
-<!-- Page level plugins -->
-<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script> 
-
-<!-- Page level custom scripts -->
-<script src="{{ asset('chart/chart-area-demo.js') }}"></script>
-<script src="{{ asset('chart/chart-pie-demo.js') }}"></script>
-
 
 
 <script>
@@ -102,5 +105,21 @@
         var nametopBar = document.getElementById("userDropdown");
         nametopBar.children[0].classList.toggle("d-none");
     });
+
+    var doc = document.documentElement
+
+    window.addEventListener('scroll', function() {
+        let value = parseInt(100 * doc.scrollTop / (doc.scrollHeight - doc.clientHeight))
+        if (value > 30) {
+            document.getElementById('back-to-top').classList.remove('d-none')
+        } else {
+            document.getElementById('back-to-top').classList.add('d-none')
+        }
+    })
+
+    function top_button() {
+        window.scrollTo(0, 0);
+    }
 </script>
+
 </html>

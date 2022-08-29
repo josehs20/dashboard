@@ -55,7 +55,7 @@ class AddPagarToSyncCommand extends Command
                     ]);
 
                     $job = (new AddPagarToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('vendasProdSaldos');
+                    dispatch($job)->onQueue('first_queue');
                     
                     echo "Added {$file}\n";
                 }

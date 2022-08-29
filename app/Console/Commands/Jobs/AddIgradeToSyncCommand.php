@@ -54,7 +54,7 @@ class AddIgradeToSyncCommand extends Command
                     ]);
 
                     $job = (new AddIgradeToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('vendasProdSaldos');
+                    dispatch($job)->onQueue('second_queue');
 
                     echo "Added {$file}\n";
                 }

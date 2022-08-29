@@ -2,7 +2,7 @@
 
 @section('content')
     @if (Session::has('success'))
-       
+
         <body onload="alertMessage(null, 'success', '<?php echo Session::get('success'); ?>')">
     @endif
     <!-- Begin Page Content -->
@@ -11,7 +11,23 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
         </div>
-
+       
+            <h4 class="text-gray-1000 mx-4">Período</h4>
+            <div id="buttons-meses" class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                <label class="btn btn-outline-primary active" id="3meses">
+                  <input type="radio" name="options" onclick="consulta_grafico_area(3), consulta_grafico_pie(3)" autocomplete="off" checked>3 Meses
+                </label>
+                <label class="btn btn-outline-primary " id="6meses">
+                  <input type="radio" name="options" onclick="consulta_grafico_area(6), consulta_grafico_pie(6)" autocomplete="off"> 6 Meses
+                </label>
+                <label class="btn btn-outline-primary " id="9meses">
+                    <input type="radio" name="options" onclick="consulta_grafico_area(9), consulta_grafico_pie(9)" autocomplete="off"> 9 Meses
+                </label>
+                <label class="btn btn-outline-primary " id="12meses">
+                    <input type="radio" name="options" onclick="consulta_grafico_area(12), consulta_grafico_pie(12)" autocomplete="off"> 12 Meses
+                  </label>
+              </div>
+       
         <!-- Content Row -->
         <div class="row">
 
@@ -22,7 +38,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-info text-uppercase mx-2">
-                                    TOTAL DE VENDAS ANUAL</div>
+                                    TOTAL DE VENDAS</div>
                                 <div id="vendas" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
@@ -38,7 +54,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mx-2">
-                                    TOTAL CUSTO ANUAL</div>
+                                    TOTAL CUSTO</div>
                                 <div id="custos" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
@@ -54,7 +70,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mx-2">
-                                    DEVOLUÇÕES ANUAL</div>
+                                    DEVOLUÇÕES</div>
                                 <div id="devolucoes" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
@@ -70,7 +86,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mx-2">
-                                    LUCRO ANUAL</div>
+                                    LUCRO</div>
                                 <div id="lucro" class="h5 mb-0 font-weight-bold text-gray-800 mx-2">100</div>
                             </div>
                             <div class="col-auto">
@@ -97,7 +113,7 @@
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
-                        <div class="chart-area">
+                        <div id="chart-area-content" class="chart-area">
                             <canvas id="resumoDeGanhos"></canvas>
                         </div>
                     </div>
@@ -189,3 +205,9 @@
         </div> --}}
     </div>
 @endsection
+<!-- Page level plugins -->
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}" defer></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ asset('chart/chart-pie-demo.js') }}" defer></script>
+<script src="{{ asset('chart/chart-area-demo.js') }}" defer></script>

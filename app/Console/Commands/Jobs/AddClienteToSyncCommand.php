@@ -54,7 +54,7 @@ class AddClienteToSyncCommand extends Command
                     ]);
 
                     $job = (new AddClienteToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                    dispatch($job)->onQueue('sincronizando');
+                    dispatch($job)->onQueue('first_queue');
 
                     echo "Added {$file}\n";
                 }

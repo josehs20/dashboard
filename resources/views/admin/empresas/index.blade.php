@@ -42,7 +42,7 @@
                                 <tr>
                                     <th scope="col">Nome</th>
                                     <th scope="col">CNPJ</th>
-                                    <th scope="col">Ultima Sincronização</th>
+                                    <th scope="col">Sincronização</th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>

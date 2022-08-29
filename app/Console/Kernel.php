@@ -15,28 +15,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('verifica:produto')->everyFifteenMinutes();
-        $schedule->command('verifica:receber')->everyFifteenMinutes();
-        $schedule->command('delete:registroAntigo')->everyThirtyMinutes();
+        // $schedule->command('verifica:produto')->everyFifteenMinutes();
+        // $schedule->command('verifica:receber')->everyFifteenMinutes();
+        // $schedule->command('delete:registroAntigo')->everyThirtyMinutes();
 
         $schedule->command('sync:close')->everyFifteenMinutes();
-        $schedule->command('add-job:generica')->everyFifteenMinutes();
-        $schedule->command('add-job:funario')->everyFifteenMinutes();
-        $schedule->command('add-job:caixa')->everyFifteenMinutes();
-        $schedule->command('add-job:cliente')->everyFifteenMinutes();
+        $schedule->command('add-job:generica')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:funario')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:caixa')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:cliente')->everyFifteenMinutes();//first_queue
 
-        $schedule->command('add-job:endereco')->everyFifteenMinutes();
-        $schedule->command('add-job:grade')->everyFifteenMinutes();
-        $schedule->command('add-job:igrade')->everyFifteenMinutes();
+        $schedule->command('add-job:endereco')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:grade')->everyFifteenMinutes();//second_queue
+        $schedule->command('add-job:igrade')->everyFifteenMinutes();//second_queue
 
-        $schedule->command('add-job:fornecedor')->everyFifteenMinutes();
-        $schedule->command('add-job:produto')->everyFifteenMinutes();
-        $schedule->command('add-job:receber')->everyFifteenMinutes();
-        $schedule->command('add-job:pagar')->everyFifteenMinutes();
+        $schedule->command('add-job:fornecedor')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:produto')->everyFifteenMinutes();//second_queue
+        $schedule->command('add-job:receber')->everyFifteenMinutes();//first_queue
+        $schedule->command('add-job:pagar')->everyFifteenMinutes();//first_queue
 
-        $schedule->command('add-job:prodsaldo')->everyFifteenMinutes();
-        $schedule->command('add-job:venda')->everyFifteenMinutes();
-        $schedule->command('add-job:prodrazao')->everyFifteenMinutes();
+        $schedule->command('add-job:prodsaldo')->everyFifteenMinutes();//second_queue
+        $schedule->command('add-job:venda')->everyFifteenMinutes();//second_queue
+        $schedule->command('add-job:prodrazao')->everyFifteenMinutes();//second_queue
     }
 
     /**

@@ -20,13 +20,14 @@ class HomeController extends Controller
         return view('dashboard.index');
     }
 
-    public function grafico_pie()
+    public function grafico_pie(Request $request)
     {
         $cores = ['#4e73df', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69', '#5a5c69', '#00FFFF', '#696969', '8FBC8F', '20B2AA'];
         $data = [];
         $caixas = [];
+        $periodo = $request->periodo ? $request->periodo : 3;
         $caixas = Caixa::whereIn('loja_id', auth()->user()->lojas->pluck('id'))
-            ->whereDate('data', '>=', date("Y-m-d", strtotime('-12 month')))->get()->groupBy('especie');
+            ->whereDate('data', '>=', date("Y-m-d", strtotime('-'.$periodo.'month')))->get()->groupBy('especie');
 
         $i = 0;
         foreach ($caixas as $key => $c) {
@@ -87,8 +88,10 @@ class HomeController extends Controller
         }
     }
 
-    public function grafico_area()
+    public function grafico_area(Request $request)
     {
+        $periodo = $request->periodo ? $request->periodo : 3;
+        
         $totais = [];
         $totaldevolucoes = [];
         $meses = [
@@ -98,10 +101,10 @@ class HomeController extends Controller
         $valores = ['Lucro' => null, 'Custo' => null];
 
         $vendas = Venda::with('itens')->whereIn('loja_id', auth()->user()->lojas->pluck('id'))
-            ->whereDate('data', '>=', date("Y-m-d", strtotime('-12 month')))->get();
+            ->whereDate('data', '>=', date("Y-m-d", strtotime('-'.$periodo.'month')))->get();
 
         $devolucoes = Devolucao::with('itens')->whereIn('loja_id', auth()->user()->lojas->pluck('id'))
-            ->whereDate('data', '>=', date("Y-m-d", strtotime('-12 month')))->get();
+            ->whereDate('data', '>=', date("Y-m-d", strtotime('-'.$periodo.'month')))->get();
 
         // $totalVendasMes = $queryV->selectRaw("cast(data as date) data, sum(total) total_valor")->groupByRaw('month(data)');
 

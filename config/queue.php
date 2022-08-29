@@ -35,20 +35,6 @@ return [
         ],
 
         'redis' => [
-            // 'driver' => 'database',
-            // 'table' => 'jobs',
-            // 'queue' => 'default',
-            // 'retry_after' => 90,
-            // 'after_commit' => false,
-            'driver' => 'redis',
-            'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'sincronizando'),
-            'retry_after' => 90,
-            'block_for' => null,
-            'after_commit' => false,
-        ],
-
-        'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'appVenda'),
@@ -63,9 +49,23 @@ return [
         ],
         
         'redis' => [
+            // 'driver' => 'database',
+            // 'table' => 'jobs',
+            // 'queue' => 'default',
+            // 'retry_after' => 90,
+            // 'after_commit' => false,
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'vendasProdSaldos'),
+            'queue' => env('REDIS_QUEUE', 'first_queue'),
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+        
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'second_queue'),
             'retry_after' => 90,
             'block_for' => null,
             'after_commit' => false,
@@ -99,7 +99,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'appVenda', 'sincronizando', 'vendasProdSaldos'),
+            'queue' => env('REDIS_QUEUE', 'appVenda', 'first_queue', 'second_queue'),
             'retry_after' => 90,
             'block_for' => null,
             'after_commit' => false,

@@ -229,7 +229,7 @@ class VendedoresController extends Controller
     {
         $token = ['api-key-alltech' => config('app.api_key_alltech')];
 
-        $response =  Http::withHeaders($token)->post('http://localhost:8001/api/create/user/venda-externa', [
+        $response =  Http::withHeaders($token)->post(urlBaseVendaExterna().'/create/user/venda-externa', [
             'name' =>    $request->name,
             'email' =>   $request->email,
             'password' =>   bcrypt($request->password),
@@ -258,7 +258,7 @@ class VendedoresController extends Controller
     {
         $token = ['api-key-alltech' => config('app.api_key_alltech')];
         //mandar os parametros de acordo com nome no model user
-        $response =  Http::withHeaders($token)->put('http://localhost:8001/api/update/user/venda-externa/' . $vendedorUsuario->id, [
+        $response =  Http::withHeaders($token)->put(urlBaseVendaExterna().'/update/user/venda-externa/' . $vendedorUsuario->id, [
             'name' =>    $request->name,
             'email' =>   $request->email,
             'password' =>   $request->password ? bcrypt($request->password) : $vendedorUsuario->password,

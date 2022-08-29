@@ -46,8 +46,8 @@
                                     <tr>
                                         <td>{{ $us->name }}</td>
                                         <td>{{ $us->email }}</td>
-                                        <td>{{ $us->perfil == 'adminVenda' ? 'Admin venda' : ($us->perfil == 'vendedor' ? 'Vendedor Externo' : 'Somente consulta') }}</td>
                                         <td>{{ $us->loja->alltech_id }}
+                                        <td>{{ $us->perfil == 'adminVenda' ? 'Admin venda' : ($us->perfil == 'vendedor' ? 'Vendedor Externo' : 'Consulta') }}</td>
                                         </td>
 
                                         <td><a href="{{ route('empresa.usuarios.edit', ['empresa' => $us->loja->empresa->id, 'usuario' => $us->id]) }}"><i

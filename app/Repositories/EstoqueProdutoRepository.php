@@ -18,7 +18,7 @@ class EstoqueProdutoRepository
     public function selectAtributosProduto($loja_id, $atributos_produto)
     {
         $this->model = $this->model->where('loja_id', $loja_id)->whereNotNull('codbar')
-            ->with('iGrade', $atributos_produto);
+            ->with('iGrade', $atributos_produto)->where('situacao', 'A');
     }
 
     public function filtrosHas_produto($loja_id, $tabela, $filtros)

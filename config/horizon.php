@@ -167,7 +167,7 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['vendasProdSaldos', 'appVenda', 'sincronizando'],
+            'queue' => ['appVenda', 'first_queue', 'second_queue'],
             'balance' => 'auto',
             'maxProcesses' => 1,
             'maxTime' => 0,

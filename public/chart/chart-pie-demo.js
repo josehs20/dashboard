@@ -4,21 +4,30 @@
 
 
 //consulta ajax
-function consultaGraficoPie() {
+function consulta_grafico_pie(periodo) {
   $.ajax({
     url: "/grafico-pie",
     type: "GET",
+    data: {
+      periodo: periodo,
+    },
     dataType: 'json',
   }).done(function (response) {
     let data = response;
+
     montaGraficoPie(data);
   })
 }
 
 $(function () {
-  consultaGraficoPie();
+  consulta_grafico_pie();
 })
 
+//   var intervalo = window.setInterval(function() {
+//     console.log(data.Dinheiro.qtd = data.Dinheiro.qtd + 10);
+//     // var ctx = document.getElementById("graficoPie");
+//     graficoPie.destroy()
+//     montaGraficoPie(data);
 // Pie Chart Example
 function montaGraficoPie(data) {
   let dadosGrafico = [];
@@ -35,10 +44,12 @@ function montaGraficoPie(data) {
   })
 
   document.getElementById('totalGraficoPie').innerText = 'Total: ' + total;
-  
-  var ctx = document.getElementById("graficoPie");
 
-  var graficoPie = new Chart(ctx.getContext('2d'), {
+  if (graficoPie.data) {
+    graficoPie.destroy()
+  }
+  var ctx = document.getElementById("graficoPie").getContext('2d');
+   graficoPie = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: dadosGrafico.map(function (e) { return e.especies; }),//["Dinheiro", "Cartão", "Ticket", 'vareados'],

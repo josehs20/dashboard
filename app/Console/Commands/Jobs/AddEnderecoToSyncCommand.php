@@ -53,7 +53,7 @@ class AddEnderecoToSyncCommand extends Command
                      ]);
 
                      $job = (new AddEnderecoToSyncJob($empresa, $file))->delay(now()->addSeconds(3));
-                     dispatch($job)->onQueue('sincronizando');
+                     dispatch($job)->onQueue('first_queue');
                     
                     echo "Added {$file}\n";
                 }

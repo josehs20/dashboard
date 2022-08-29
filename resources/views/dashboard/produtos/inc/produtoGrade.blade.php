@@ -10,13 +10,6 @@
 
     <td><i class="ri-arrow-up-down-line"></i></td>
 </tr>
-{{-- <tr style="width: 150%;" class="row">
-    <td id="noneCollapse{{ $key }}" class="d-none">
-        <div class="collapse" id="produtoCollapse{{ $key }}">
-            <div class="card card-body">
-          
-
-              <div class="table-responsive"> --}}
 <tr>
     <td colspan="4" class="collapse" id="produtoCollapse{{ $key }}">
         <div class="card card-body d-flex justify-content-center">
@@ -35,7 +28,7 @@
                 <tbody>
                     @foreach ($p->estoques as $e)
                         <tr>
-                            <td>{{ $e->tam }}</td>
+                            <td>{{$e->iGrade->tam}}</td>
                             <td>{{ $e->produto->custo }}</td>
                             <td>{{ porcentagemFator($p->preco, $e->iGrade) }}
                             </td>
@@ -49,37 +42,3 @@
         </div>
     </td>
 </tr>
-{{-- <tr style="width: 150%;" class="row">
-                                        <td>
-                                            <div class="collapse" id="produtoCollapse{{ $key }}">
-                                                <div class="card card-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-hover">
-                                                            <thead>
-                                                                    <th scope="col">{{ $p[0]->iGrade->grade->nome }}</th>
-                                                                    <th scope="col">Custo</th>
-                                                                    <th scope="col">Venda</th>
-                                                                    <th scope="col">Fator</th>
-                                                                    <th scope="col">tipo</th>
-                                                                    <th scope="col">Saldo</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>{{dd($p)}}
-                                                                @foreach ($p->estoques as $e)
-                                                                    <tr>
-                                                                        <td>{{ $e->tam }}</td>
-                                                                        <td>{{ $e->produto->custo }}</td>
-                                                                        <td>{{ porcentagemFator($p->preco, $e->iGrade) }}
-                                                                        </td>
-                                                                        <td>{{ $e->iGrade->fator }}</td>
-                                                                        <td>{{ $e->iGrade->tipo }}</td>
-                                                                        <td>{{ $e->saldo }}</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr> --}}
